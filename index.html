@@ -32,16 +32,18 @@
   .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:24px;}
   .card{
     background:var(--surface); border:1px solid var(--border); border-top:3px solid var(--navy);
-    padding:30px 28px; text-decoration:none; color:var(--ink); display:block;
-    transition:transform .12s ease, box-shadow .12s ease;
+    padding:30px 28px; color:var(--ink); display:block;
   }
-  .card:hover{transform:translateY(-3px); box-shadow:0 16px 32px -20px rgba(22,38,79,.3);}
   .card:nth-child(2){border-top-color:var(--blue);}
   .card:nth-child(3){border-top-color:var(--red);}
   .card .tag{font-family:"Courier New",monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted);}
   .card h2{font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif; font-weight:600; font-size:1.3rem; margin:10px 0 10px;}
-  .card p{color:var(--muted); font-size:.95rem; margin:0 0 18px;}
-  .card .go{font-size:.85rem; color:var(--blue); border-bottom:1px solid var(--blue);}
+  .card p{color:var(--muted); font-size:.95rem; margin:0 0 20px;}
+  .card .links{display:flex; gap:20px; flex-wrap:wrap;}
+  .card .links a{font-size:.85rem; color:var(--blue); text-decoration:none; border-bottom:1px solid var(--blue);}
+  .card .links a:hover{color:var(--navy); border-color:var(--navy);}
+  .card .links a.secondary{color:var(--muted); border-color:var(--border);}
+  .card .links a.secondary:hover{color:var(--ink); border-color:var(--ink);}
   footer{margin-top:64px; font-size:.8rem; color:var(--muted);}
 </style>
 </head>
@@ -53,26 +55,35 @@
     </div>
     <span class="eyebrow">Design Review</span>
     <h1>Three design concepts, ready for review.</h1>
-    <p class="lead">Each concept is a full multi-page site — Home, About, Services, Register, Request Staff, and Contact — built from the Staff Iceland logo's colour palette. Pick a card to browse.</p>
+    <p class="lead">Each concept comes in two formats: a full multi-page site (Home, About, Services, Register, Request Staff, and Contact as separate pages) or a single scrolling one-page site. Both use the same visual system, built from the Staff Iceland logo's colour palette.</p>
     <div class="grid">
-      <a class="card" href="harbour/index.html">
+      <div class="card">
         <span class="tag">Concept A</span>
         <h2>Harbour</h2>
         <p>Institutional and trust-led, with editorial serif headlines and a harbour/compass motif.</p>
-        <span class="go">Browse Harbour &rarr;</span>
-      </a>
-      <a class="card" href="current/index.html">
+        <div class="links">
+          <a href="harbour/index.html">Multi-page &rarr;</a>
+          <a class="secondary" href="single-page/harbour.html">Single-page &rarr;</a>
+        </div>
+      </div>
+      <div class="card">
         <span class="tag">Concept B</span>
         <h2>Current</h2>
         <p>Bold and energetic, with diagonal cuts and dynamic color blocking.</p>
-        <span class="go">Browse Current &rarr;</span>
-      </a>
-      <a class="card" href="fjall/index.html">
+        <div class="links">
+          <a href="current/index.html">Multi-page &rarr;</a>
+          <a class="secondary" href="single-page/current.html">Single-page &rarr;</a>
+        </div>
+      </div>
+      <div class="card">
         <span class="tag">Concept C</span>
         <h2>Fjall</h2>
         <p>Quiet Nordic minimalism, with generous whitespace and restrained accents.</p>
-        <span class="go">Browse Fjall &rarr;</span>
-      </a>
+        <div class="links">
+          <a href="fjall/index.html">Multi-page &rarr;</a>
+          <a class="secondary" href="single-page/fjall.html">Single-page &rarr;</a>
+        </div>
+      </div>
     </div>
     <footer>Staff Iceland — design concepts for client review.</footer>
   </div>
