@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Staff Iceland — Database Schema (ERD)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root{
+    --paper:#F7F6F2; --surface:#FFFFFF; --ink:#1E2430; --muted:#5B6472;
+    --navy:#16264F; --blue:#2C7FCB; --red:#C63A2B; --border:#E1DDD2; --code-bg:#F0EEE7;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --paper:#11151D; --surface:#171C27; --ink:#EDEEF2; --muted:#9AA2B1; --border:#2A2F3B; --code-bg:#1B2029; }
+  }
+  :root[data-theme="dark"]{ --paper:#11151D; --surface:#171C27; --ink:#EDEEF2; --muted:#9AA2B1; --border:#2A2F3B; --code-bg:#1B2029; }
+  :root[data-theme="light"]{ --paper:#F7F6F2; --surface:#FFFFFF; --ink:#1E2430; --muted:#5B6472; --border:#E1DDD2; --code-bg:#F0EEE7; }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif; line-height:1.6;
+  }
+  .wrap{max-width:880px; margin:0 auto; padding:56px 28px 90px;}
+  .eyebrow{font-family:"Courier New",monospace; letter-spacing:.14em; text-transform:uppercase; font-size:.72rem; color:var(--blue);}
+  h1{
+    font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif; font-weight:600;
+    font-size:clamp(1.6rem,3.4vw,2.1rem); margin:12px 0 18px; text-wrap:balance;
+  }
+  h2{
+    font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif; font-weight:600;
+    font-size:1.2rem; margin:44px 0 14px; padding-bottom:10px; border-bottom:1px solid var(--border);
+  }
+  p{color:var(--muted); max-width:70ch;}
+  p.lead{font-size:1.02rem; margin-bottom:36px;}
+  .diagram{
+    background:var(--surface); border:1px solid var(--border); border-radius:8px;
+    padding:24px; margin:0 0 12px; overflow-x:auto;
+  }
+  .diagram .mermaid{display:flex; justify-content:center;}
+  ul, ol{color:var(--muted); max-width:70ch; padding-left:22px;}
+  li{margin-bottom:8px;}
+  li strong{color:var(--ink);}
+  code{
+    background:var(--code-bg); border:1px solid var(--border); border-radius:4px;
+    padding:1px 6px; font-family:"Courier New",monospace; font-size:.92em; color:var(--ink);
+  }
+  .caption{font-size:.8rem; color:var(--muted); margin-top:0;}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <span class="eyebrow">Staff Iceland — Backend Planning</span>
+    <h1>Database Schema (V1)</h1>
+    <p class="lead">This reflects everything agreed so far: employee registrations (split into identity + per-trade registration), company requests (split into identity + per-need request), the shared <code>job_categories</code> lookup, and a plain admin login. Built so that V2 (employee/company login, matching, payroll) only <em>adds</em> tables and columns — nothing here needs to be restructured later.</p>
+
+    <div class="diagram">
+      <pre class="mermaid">
+erDiagram
+    JOB_CATEGORIES ||--o{ EMPLOYEE_REGISTRATIONS : "categorizes"
+    JOB_CATEGORIES ||--o{ COMPANY_REQUESTS : "categorizes"
+    EMPLOYEES ||--o{ EMPLOYEE_REGISTRATIONS : "has"
+    COMPANIES ||--o{ COMPANY_REQUESTS : "submits"
+
+    JOB_CATEGORIES {
+        bigint id PK
+        varchar name UK "e.g. Electrician, Plumber"
+        boolean is_active "default true"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    EMPLOYEES {
+        bigint id PK
+        varchar full_name
+        varchar kennitala "nullable"
+        varchar phone
+        varchar email UK
+        varchar address
+        varchar nationality
+        varchar languages_spoken
+        boolean driver_license
+        boolean own_car
+        varchar cv_path
+        varchar photo_path "nullable"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    EMPLOYEE_REGISTRATIONS {
+        bigint id PK
+        bigint employee_id FK
+        bigint job_category_id FK
+        date available_from
+        text work_experience
+        text skills
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    COMPANIES {
+        bigint id PK
+        varchar company_name
+        varchar contact_person
+        varchar email UK
+        varchar phone
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    COMPANY_REQUESTS {
+        bigint id PK
+        bigint company_id FK
+        bigint job_category_id FK
+        int workers_needed
+        text job_description
+        varchar work_location
+        date start_date
+        varchar duration
+        text additional_notes "nullable"
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    USERS {
+        bigint id PK
+        varchar name
+        varchar email UK
+        varchar password
+        timestamp created_at
+        timestamp updated_at
+    }
+      </pre>
+    </div>
+    <p class="caption">Diagram rendered with Mermaid — requires internet access on first load (loaded from a CDN below).</p>
+
+    <h2>Notes on the diagram</h2>
+    <ul>
+      <li><strong>USERS</strong> is the admin login only (Laravel's default table) — no relationship to the other tables in V1. It's drawn standalone deliberately.</li>
+      <li><strong>EMPLOYEE_REGISTRATIONS</strong> carries a composite unique constraint on <code>(employee_id, job_category_id)</code> — not something Mermaid draws natively, so noting it here: this is what makes "register as Electrician, then later as Plumber" produce two rows, while "register as Electrician twice" updates the one row instead of duplicating it.</li>
+      <li><strong>Identity vs. activity, on both sides</strong>: EMPLOYEES&rarr;EMPLOYEE_REGISTRATIONS and COMPANIES&rarr;COMPANY_REQUESTS are the same pattern for the same reason — one stable row per real-world person/company (deduplicated by email, ready to become a login account in V2), and many rows underneath for the things that actually repeat over time (a trade applied under, a hiring need submitted).</li>
+      <li><strong>Why not a table named <code>jobs</code></strong>: Laravel reserves that name for its own queue system, so the lookup table is <code>job_categories</code>.</li>
+    </ul>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default'
+    });
+  </script>
+</body>
+</html>
