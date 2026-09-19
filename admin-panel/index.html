@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Connection — Design Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{ --bg:#F4F6F9; --surface:#fff; --border:#E1E5EC; --text:#101625; --muted:#69728A; --navy:#0F1C3F; --blue:#2E86DE; --red:#E63328; }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
+  .wrap{max-width:1140px;margin:0 auto;padding:60px 24px 80px;}
+  header{text-align:center;margin-bottom:48px;}
+  header .eyebrow{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:10px;}
+  header h1{font-size:32px;font-weight:800;margin:0 0 10px;}
+  header p{color:var(--muted);font-size:15px;max-width:620px;margin:0 auto;}
+  .designs{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .design-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,.04), 0 12px 32px -16px rgba(15,23,42,.12);display:flex;flex-direction:column;}
+  .swatch{height:120px;display:flex;align-items:flex-end;padding:16px;gap:6px;position:relative;}
+  .swatch span{display:block;border-radius:6px;flex:1;height:100%;}
+
+  .d1 .swatch{background:#fff;border-bottom:1px solid var(--border);}
+  .d1 .swatch span:nth-child(1){background:var(--navy);height:100%;flex:0 0 30%;border-radius:0;}
+  .d1 .swatch span:nth-child(2){background:var(--blue);height:60%;}
+  .d1 .swatch span:nth-child(3){background:#FDEDEC;border:1px solid var(--red);height:40%;}
+
+  .d2 .swatch{background:var(--navy);}
+  .d2 .swatch span:nth-child(1){background:transparent;border-top:3px solid var(--blue);height:70%;border-radius:4px;}
+  .d2 .swatch span:nth-child(2){background:transparent;border-top:3px solid var(--red);height:95%;border-radius:4px;}
+  .d2 .swatch span:nth-child(3){background:#131826;border:1px solid #232B3C;height:55%;border-radius:4px;}
+
+  .d3 .swatch{background:var(--navy);}
+  .d3 .swatch span:nth-child(1){background:#151d3a;border-left:4px solid var(--blue);height:80%;border-radius:2px;flex:0 0 40%;}
+  .d3 .swatch span:nth-child(2){background:#151d3a;border-left:4px solid var(--red);height:55%;border-radius:2px;}
+  .d3 .swatch span:nth-child(3){background:var(--blue);height:100%;flex:0 0 18%;clip-path:polygon(0 0,100% 0,100% 100%);}
+
+  .design-body{padding:22px 22px 24px;display:flex;flex-direction:column;gap:14px;flex:1;}
+  .design-body h2{margin:0;font-size:17px;font-weight:800;}
+  .design-body p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.5;flex:1;}
+  .tag-row{display:flex;flex-wrap:wrap;gap:6px;}
+  .tag{font-size:11px;font-weight:600;background:#F1F5F9;color:#475569;padding:4px 9px;border-radius:999px;}
+  .links{display:grid;grid-template-columns:1fr 1fr;gap:5px 12px;margin-top:6px;}
+  .links a{font-size:12.5px;font-weight:600;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .links a:hover{text-decoration:underline;}
+  .note{background:#EAF3FC;border:1px solid #cfe3f8;border-radius:14px;padding:16px 20px;margin-bottom:32px;font-size:13.5px;color:#1F4E78;line-height:1.6;}
+  .note b{color:var(--navy);}
+  footer{text-align:center;margin-top:48px;color:var(--muted);font-size:13px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Staff Connection ehf.</div>
+    <h1>Version 3 design concepts</h1>
+    <p>Three modernized visual directions for the admin, candidate and company interfaces — each with a genuinely different layout skeleton (not just a different accent color), built on the real Staff Connection navy / blue / red brand palette, each with a working light and dark mode toggle.</p>
+  </header>
+
+  <div class="note">
+    <b>How to compare:</b> every design covers the same 8 screens with the same real data — a dashboard, an entity-level "List Employees" / "List Companies" table, the per-application "List Applications" tables, a registration edit form, the candidate portal, and a login screen. Use each page's own toggle button to check both light and dark mode.
+  </div>
+
+  <div class="designs">
+    <div class="design-card d1">
+      <div class="swatch"><span></span><span></span><span></span></div>
+      <div class="design-body">
+        <h2>1. Modern Minimal</h2>
+        <p>Classic light sidebar + top bar SaaS layout, white shadow cards. The sidebar itself switches with the theme. Familiar and easy to scan for daily admin work.</p>
+        <div class="tag-row"><span class="tag">Sidebar flips w/ theme</span><span class="tag">Shadow cards</span><span class="tag">Inter</span></div>
+        <div class="links">
+          <a href="01-modern-minimal/dashboard.html">Dashboard &rarr;</a>
+          <a href="01-modern-minimal/employees-list.html">List Employees &rarr;</a>
+          <a href="01-modern-minimal/employees-applications.html">List Applications &rarr;</a>
+          <a href="01-modern-minimal/companies-list.html">List Companies &rarr;</a>
+          <a href="01-modern-minimal/companies-applications.html">Company Apps &rarr;</a>
+          <a href="01-modern-minimal/edit-registration.html">Edit registration &rarr;</a>
+          <a href="01-modern-minimal/candidate-portal.html">Candidate portal &rarr;</a>
+          <a href="01-modern-minimal/login.html">Login screen &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="design-card d2">
+      <div class="swatch"><span></span><span></span><span></span></div>
+      <div class="design-body">
+        <h2>2. Command Bar</h2>
+        <p>No sidebar — a horizontal top bar that stays brand navy in both modes, bordered sharp-cornered cards, top-border accent stat blocks, Space Grotesk. Structured, technical, console-like.</p>
+        <div class="tag-row"><span class="tag">Always-navy top bar</span><span class="tag">Bordered cards</span><span class="tag">Space Grotesk</span></div>
+        <div class="links">
+          <a href="02-dark-saas/dashboard.html">Dashboard &rarr;</a>
+          <a href="02-dark-saas/employees-list.html">List Employees &rarr;</a>
+          <a href="02-dark-saas/employees-applications.html">List Applications &rarr;</a>
+          <a href="02-dark-saas/companies-list.html">List Companies &rarr;</a>
+          <a href="02-dark-saas/companies-applications.html">Company Apps &rarr;</a>
+          <a href="02-dark-saas/edit-registration.html">Edit registration &rarr;</a>
+          <a href="02-dark-saas/candidate-portal.html">Candidate portal &rarr;</a>
+          <a href="02-dark-saas/login.html">Login screen &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="design-card d3">
+      <div class="swatch"><span></span><span></span><span></span></div>
+      <div class="design-body">
+        <h2>3. Beacon</h2>
+        <p>A permanent navy branded sidebar rail that never changes with theme, left-border accent cards, an asymmetric hero-stat dashboard, and a geometric triangle motif echoing the logo mark.</p>
+        <div class="tag-row"><span class="tag">Always-navy sidebar</span><span class="tag">Left-border cards</span><span class="tag">Asymmetric grid</span></div>
+        <div class="links">
+          <a href="03-vibrant-friendly/dashboard.html">Dashboard &rarr;</a>
+          <a href="03-vibrant-friendly/employees-list.html">List Employees &rarr;</a>
+          <a href="03-vibrant-friendly/employees-applications.html">List Applications &rarr;</a>
+          <a href="03-vibrant-friendly/companies-list.html">List Companies &rarr;</a>
+          <a href="03-vibrant-friendly/companies-applications.html">Company Apps &rarr;</a>
+          <a href="03-vibrant-friendly/edit-registration.html">Edit registration &rarr;</a>
+          <a href="03-vibrant-friendly/candidate-portal.html">Candidate portal &rarr;</a>
+          <a href="03-vibrant-friendly/login.html">Login screen &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Built for review purposes — pick a direction and it will be implemented across the real admin, candidate and company portals.</footer>
+</div>
+</body>
+</html>

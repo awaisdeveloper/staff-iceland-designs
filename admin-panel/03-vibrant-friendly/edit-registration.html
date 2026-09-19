@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Registration — Beacon</title>
+<script>
+(function(){try{var t=localStorage.getItem('sc-theme-beacon');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page-bg:#F4F6F9; --surface:#FFFFFF; --ink:#101625; --muted:#69728A;
+  --navy:#0F1C3F; --blue:#2E86DE; --red:#E63328; --border:#E1E5EC;
+  --green:#2E8648; --green-soft:#EAF6EE; --amber:#B7791F; --amber-soft:#FEF3E2;
+  --radius:12px; --rail-w:272px;
+}
+:root[data-theme="dark"]{ --page-bg:#0B0F17; --surface:#131826; --ink:#EEF0F5; --muted:#9096A8; --border:#232B3C; --green-soft:#0F2A1C; --amber-soft:#332409; }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --page-bg:#0B0F17; --surface:#131826; --ink:#EEF0F5; --muted:#9096A8; --border:#232B3C; --green-soft:#0F2A1C; --amber-soft:#332409; } }
+*{box-sizing:border-box;}
+body{margin:0;font-family:'Sora',sans-serif;background:var(--page-bg);color:var(--ink);}
+a{text-decoration:none;color:inherit;}
+.shell{display:flex;min-height:100vh;}
+.rail{width:var(--rail-w);flex-shrink:0;background:var(--navy);color:#fff;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;z-index:50;transition:transform .25s ease;}
+.rail-brand{display:flex;align-items:center;gap:12px;padding:24px 22px 18px;}
+.rail-brand .mark{width:38px;height:38px;border-radius:11px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0;}
+.rail-brand .word{font-weight:800;font-size:16px;letter-spacing:-.01em;}
+.rail-brand .word small{display:block;font-weight:500;font-size:11px;opacity:.6;letter-spacing:.02em;}
+.rail-nav{padding:6px 14px;flex:1;}
+.rail-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.42;padding:16px 10px 6px;}
+.rail-link{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:9px;font-size:14px;font-weight:600;color:rgba(255,255,255,.75);margin-bottom:2px;}
+.rail-link svg{width:17px;height:17px;flex-shrink:0;opacity:.85;}
+.rail-link:hover{background:rgba(255,255,255,.08);color:#fff;}
+.rail-link.active{background:var(--blue);color:#fff;}
+.rail-link.active svg{opacity:1;}
+details.rail-group{margin-bottom:2px;}
+details.rail-group>summary{list-style:none;display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:9px;font-size:14px;font-weight:600;color:rgba(255,255,255,.75);cursor:pointer;}
+details.rail-group>summary::-webkit-details-marker{display:none;}
+details.rail-group>summary svg.ic{width:17px;height:17px;flex-shrink:0;opacity:.85;}
+details.rail-group>summary svg.chev{width:14px;height:14px;margin-left:auto;transition:transform .2s;opacity:.55;flex-shrink:0;}
+details.rail-group[open]>summary svg.chev{transform:rotate(180deg);}
+details.rail-group>summary:hover{background:rgba(255,255,255,.08);color:#fff;}
+details.rail-group.has-active>summary{color:#fff;}
+.rail-sub{padding:2px 0 6px 16px;display:flex;flex-direction:column;gap:1px;}
+.rail-sub a{display:flex;align-items:center;gap:9px;padding:8px 12px;border-radius:8px;font-size:13.5px;font-weight:500;color:rgba(255,255,255,.65);}
+.rail-sub a:hover{background:rgba(255,255,255,.08);color:#fff;}
+.rail-sub a.active{color:#fff;font-weight:700;background:rgba(46,134,222,.28);}
+.rail-sub a .dot{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0;}
+.rail-sub a.active .dot{background:var(--blue);}
+.rail-foot{padding:14px;border-top:1px solid rgba(255,255,255,.12);display:flex;align-items:center;gap:10px;}
+.rail-user{display:flex;align-items:center;gap:10px;min-width:0;flex:1;}
+.rail-user .avatar{width:34px;height:34px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;}
+.rail-user-text{min-width:0;flex:1;}
+.rail-user-text .who{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rail-user-text .role{font-size:11px;color:rgba(255,255,255,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.theme-btn{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.1);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.theme-btn svg{width:16px;height:16px;}
+.theme-btn .moon{display:none;}
+:root[data-theme="dark"] .theme-btn .sun{display:none;}
+:root[data-theme="dark"] .theme-btn .moon{display:block;}
+.rail-backdrop{display:none;}
+.content{flex:1;min-width:0;}
+.topbar{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;gap:16px;}
+.hamburger{display:none;width:38px;height:38px;border-radius:9px;border:1px solid var(--border);background:var(--surface);align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.hamburger svg{width:18px;height:18px;color:var(--ink);}
+.page-main{padding:32px;max-width:980px;}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:16px;}
+.page-head h1{font-size:24px;font-weight:800;margin:0 0 4px;letter-spacing:-.01em;}
+.page-head p{margin:0 0 24px;color:var(--muted);font-size:14px;}
+.card{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--blue);border-radius:var(--radius);padding:24px;margin-bottom:20px;}
+.card.accent-red{border-left-color:var(--red);}
+.card h3{margin:0 0 4px;font-size:16.5px;font-weight:800;}
+.card .desc{margin:0 0 18px;font-size:13px;color:var(--muted);}
+.card.internal{border-left-color:var(--muted);background:var(--page-bg);}
+.field-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+.field{display:flex;flex-direction:column;gap:6px;}
+.field.full{grid-column:1/-1;}
+.field label{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+.field input,.field select,.field textarea{border:1px solid var(--border);border-radius:9px;padding:10px 12px;font-size:13.5px;font-family:inherit;background:var(--page-bg);color:var(--ink);}
+.field textarea{resize:vertical;min-height:70px;}
+.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid rgba(46,134,222,.25);border-color:var(--blue);}
+.hint{font-size:12px;color:var(--muted);margin-top:6px;}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-bottom:18px;}
+th{text-align:left;color:var(--muted);font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:0 8px 10px;border-bottom:1px solid var(--border);}
+td{padding:12px 8px;border-bottom:1px solid var(--border);}
+.pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700;}
+.pill.blue{background:rgba(46,134,222,.14);color:var(--blue);}
+.row-btn{border:1px solid var(--border);background:var(--surface);color:var(--ink);border-radius:8px;padding:7px 13px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;}
+.add-app{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:end;}
+.btn{border:none;border-radius:10px;padding:11px 20px;font-size:13.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;}
+.btn-primary{background:var(--blue);color:#fff;}
+.response-box{background:var(--page-bg);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:13.5px;color:var(--muted);margin-top:8px;}
+@media (max-width:1024px){
+  .rail{position:fixed;left:0;top:0;transform:translateX(-100%);}
+  body.rail-open .rail{transform:translateX(0);}
+  body.rail-open .rail-backdrop{display:block;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:45;}
+  .hamburger{display:flex;}
+}
+@media (max-width:640px){
+  .page-main{padding:20px;}
+  .field-grid{grid-template-columns:1fr;}
+  .add-app{grid-template-columns:1fr;}
+  .card{padding:18px;}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="rail-backdrop" onclick="document.body.classList.remove('rail-open')"></div>
+  <aside class="rail">
+    <div class="rail-brand"><div class="mark">S</div><div class="word">Staff Connection<small>Admin panel</small></div></div>
+    <nav class="rail-nav">
+      <div class="rail-label">Overview</div>
+      <a class="rail-link" href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>Dashboard</a>
+      <div class="rail-label">Records</div>
+      <details class="rail-group has-active" open>
+        <summary><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Employees<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <div class="rail-sub"><a class="active" href="employees-list.html"><span class="dot"></span>List Employees</a><a href="employees-applications.html"><span class="dot"></span>List Applications</a></div>
+      </details>
+      <details class="rail-group">
+        <summary><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Company<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></summary>
+        <div class="rail-sub"><a href="companies-list.html"><span class="dot"></span>List Companies</a><a href="companies-applications.html"><span class="dot"></span>List Applications</a></div>
+      </details>
+      <a class="rail-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Contact Messages</a>
+      <a class="rail-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Privacy Requests</a>
+      <div class="rail-label">System</div>
+      <a class="rail-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20v-6M12 8V4M6 20v-9M6 7V4M18 20v-3M18 13V4"/></svg>Audit Log</a>
+      <a class="rail-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>Queue Jobs</a>
+    </nav>
+    <div class="rail-foot">
+      <div class="rail-user"><div class="avatar">A</div><div class="rail-user-text"><div class="who">Admin User</div><div class="role">Staff Iceland</div></div></div>
+      <button class="theme-btn" onclick="(function(){var r=document.documentElement,c=r.getAttribute('data-theme')==='dark'?'light':'dark';r.setAttribute('data-theme',c);try{localStorage.setItem('sc-theme-beacon',c);}catch(e){}})()">
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </aside>
+  <div class="content">
+    <div class="topbar"><button class="hamburger" onclick="document.body.classList.toggle('rail-open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button></div>
+    <main class="page-main">
+      <a class="back-link" href="employees-list.html">&larr; Back to List Employees</a>
+      <div class="page-head">
+        <h1>Edit Registration</h1>
+        <p>Awais Test Candidate — Warehousing</p>
+      </div>
+
+      <div class="card">
+        <h3>Candidate details</h3>
+        <p class="desc">Core information from the candidate's submission.</p>
+        <div class="field-grid">
+          <div class="field"><label>Full name</label><input type="text" value="Awais Test Candidate"></div>
+          <div class="field"><label>Phone</label><input type="text" value="555-1234"></div>
+          <div class="field"><label>Email</label><input type="text" value="awais.sidd.ma@gmail.com"></div>
+          <div class="field"><label>Address</label><input type="text" value="Laugavegur 10, Reykjavik"></div>
+          <div class="field"><label>Gender</label><select><option selected>Male</option><option>Female</option></select></div>
+          <div class="field"><label>Engagement type</label><select><option selected>Employee</option><option>Contractor</option><option>Both</option></select></div>
+          <div class="field"><label>Nationality</label><select><option selected>American</option><option>Icelandic</option></select></div>
+          <div class="field"><label>Kennitala</label><input type="text" value="010190-1269"></div>
+          <div class="field"><label>Date of birth</label><input type="text" value="1990-01-01"></div>
+          <div class="field"><label>Age</label><input type="text" value="36" readonly></div>
+          <div class="field full"><label>Skills</label><textarea>Teamwork, punctuality, physical stamina</textarea></div>
+          <div class="field full"><label>Additional comments</label><textarea placeholder="No comments left"></textarea></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Applications</h3>
+        <p class="desc">One row per job category — placing or withdrawing one never affects the candidate's other applications.</p>
+        <table>
+          <thead><tr><th>Job category</th><th>Subcategory</th><th>Status</th><th></th></tr></thead>
+          <tbody><tr><td>Warehousing</td><td>Warehouse Workers</td><td><span class="pill blue">Placed</span></td><td><button class="row-btn">Move back to submitted</button></td></tr></tbody>
+        </table>
+        <div class="add-app">
+          <div class="field"><label>Add application for category</label><select><option>Select one</option><option>Construction</option><option>Cleaning</option></select></div>
+          <div class="field"><label>Subcategory</label><select><option>Select one or more</option></select></div>
+          <button class="btn btn-primary">Add application</button>
+        </div>
+      </div>
+
+      <div class="card accent-red">
+        <h3>Right-to-work verification</h3>
+        <p class="desc">Manual staff verification — separate from the candidate's own declared answer and from email verification.</p>
+        <div class="field-grid">
+          <div class="field"><label>Verification status</label><select><option>Not checked</option><option selected>Pending</option><option>Verified</option><option>Rejected</option><option>Expired</option></select></div>
+          <div class="field"><label>Evidence reference</label><input type="text" placeholder="e.g. document id, file reference"></div>
+          <div class="field full"><label>Internal note</label><textarea placeholder="Staff only — never shown to the candidate."></textarea></div>
+          <div class="field full"><label>Request to candidate</label><textarea>Please upload a copy of your passport or residence permit.</textarea>
+            <span class="hint">Shown to the candidate on their portal, and included in the email they get when this is saved.</span>
+          </div>
+        </div>
+        <div style="margin-top:14px;"><button class="btn btn-primary">Save verification</button></div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0;">
+        <h3 style="font-size:14px;">Candidate's response</h3>
+        <div class="response-box">No response submitted yet.</div>
+      </div>
+
+      <div class="card internal">
+        <h3>Internal — staff only</h3>
+        <p class="desc">Never shown to the candidate.</p>
+        <div class="field-grid">
+          <div class="field"><label>Status</label><select><option selected>New</option><option>Reviewed</option><option>Archived</option></select></div>
+          <div class="field full"><label>Internal notes</label><textarea></textarea></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

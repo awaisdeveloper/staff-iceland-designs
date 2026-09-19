@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in — Beacon</title>
+<script>
+(function(){try{var t=localStorage.getItem('sc-theme-beacon');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page-bg:#F4F6F9; --surface:#FFFFFF; --ink:#101625; --muted:#69728A;
+  --navy:#0F1C3F; --blue:#2E86DE; --red:#E63328; --border:#E1E5EC;
+}
+:root[data-theme="dark"]{ --page-bg:#0B0F17; --surface:#131826; --ink:#EEF0F5; --muted:#9096A8; --border:#232B3C; }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --page-bg:#0B0F17; --surface:#131826; --ink:#EEF0F5; --muted:#9096A8; --border:#232B3C; } }
+*{box-sizing:border-box;}
+body{margin:0;font-family:'Sora',sans-serif;background:var(--page-bg);color:var(--ink);min-height:100vh;display:grid;grid-template-columns:1fr 1fr;}
+a{text-decoration:none;}
+
+.panel-left{background:var(--navy);color:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:48px;}
+.panel-left::before{content:"";position:absolute;width:0;height:0;border-style:solid;border-width:0 140px 140px 0;border-color:transparent var(--blue) transparent transparent;top:-20px;right:-20px;opacity:.5;}
+.panel-left::after{content:"";position:absolute;width:0;height:0;border-style:solid;border-width:100px 0 0 100px;border-color:transparent transparent transparent var(--red);bottom:40px;left:-10px;opacity:.6;}
+.panel-mark{width:56px;height:56px;border-radius:16px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:24px;position:relative;z-index:1;}
+.panel-quote{position:relative;z-index:1;max-width:380px;}
+.panel-quote h2{font-size:28px;font-weight:800;line-height:1.3;margin:0 0 12px;}
+.panel-quote p{font-size:14.5px;opacity:.75;margin:0;}
+.panel-foot{position:relative;z-index:1;font-size:12.5px;opacity:.6;}
+
+.panel-right{display:flex;align-items:center;justify-content:center;padding:32px;position:relative;}
+.theme-btn{position:absolute;top:24px;right:24px;width:38px;height:38px;border-radius:10px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink);}
+.theme-btn svg{width:16px;height:16px;}
+.theme-btn .moon{display:none;}
+:root[data-theme="dark"] .theme-btn .sun{display:none;}
+:root[data-theme="dark"] .theme-btn .moon{display:block;}
+.form-wrap{width:100%;max-width:360px;}
+h1{font-size:24px;font-weight:800;margin:0 0 4px;letter-spacing:-.01em;}
+.sub{margin:0 0 28px;color:var(--muted);font-size:14px;}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.field label{font-size:12px;font-weight:700;}
+.field input{border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:14px;font-family:inherit;background:var(--page-bg);color:var(--ink);}
+.field input:focus{outline:2px solid rgba(46,134,222,.3);border-color:var(--blue);}
+.row-between{display:flex;justify-content:flex-end;margin:-6px 0 22px;}
+.row-between a{font-size:12.5px;font-weight:700;color:var(--blue);}
+.btn-primary{width:100%;border:none;border-radius:10px;padding:13px;font-size:14.5px;font-weight:800;cursor:pointer;background:var(--blue);color:#fff;font-family:inherit;}
+.footer{text-align:center;margin-top:24px;font-size:12.5px;color:var(--muted);}
+
+@media (max-width:860px){
+  body{grid-template-columns:1fr;}
+  .panel-left{padding:32px;min-height:200px;}
+  .panel-quote h2{font-size:20px;}
+}
+</style>
+</head>
+<body>
+<div class="panel-left">
+  <div class="panel-mark">S</div>
+  <div class="panel-quote">
+    <h2>People and businesses, staffed right.</h2>
+    <p>The admin console for Staff Connection ehf. Manage candidates, companies and placements in one place.</p>
+  </div>
+  <div class="panel-foot">Staff Connection ehf. &middot; Reykjavik, Iceland</div>
+</div>
+<div class="panel-right">
+  <button class="theme-btn" onclick="(function(){var r=document.documentElement,c=r.getAttribute('data-theme')==='dark'?'light':'dark';r.setAttribute('data-theme',c);try{localStorage.setItem('sc-theme-beacon',c);}catch(e){}})()">
+    <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+    <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  </button>
+  <div class="form-wrap">
+    <h1>Welcome back</h1>
+    <p class="sub">Sign in to continue.</p>
+    <div class="field"><label>Email</label><input type="email" placeholder="you@company.com"></div>
+    <div class="field"><label>Password</label><input type="password" placeholder="••••••••"></div>
+    <div class="row-between"><a href="#">Forgot password?</a></div>
+    <button class="btn-primary">Sign in</button>
+    <div class="footer">Protected access &middot; Staff Connection ehf.</div>
+  </div>
+</div>
+</body>
+</html>
