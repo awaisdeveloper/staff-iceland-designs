@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Work Area Picker — KAN-130</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+/* layout: centered single column; sticky option-switcher above two comparable picker panels */
+:root{
+  --bg:#F3F6F7; --surface:#FFFFFF; --surface-2:#EAF1F3; --border:#D7E1E4;
+  --fg:#16262C; --fg-muted:#55696F; --accent:#1F5673; --accent-soft:#DCEAF0;
+  --good:#2F7A63; --good-soft:#E1F1EB; --chip:#EFF3F4;
+  --shadow: 0 1px 2px rgba(22,38,44,.06), 0 8px 24px rgba(22,38,44,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0E1B20; --surface:#142429; --surface-2:#1A2C32; --border:#28393E;
+    --fg:#E7EEEF; --fg-muted:#9AAEB3; --accent:#6FC0E0; --accent-soft:#1E3A44;
+    --good:#55C49C; --good-soft:#163A30; --chip:#1C2D32;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--fg); margin:0;
+  font-family:"IBM Plex Sans",system-ui,sans-serif;
+  padding-left:16px; padding-right:16px;
+}
+.wrap{max-width:860px; margin:0 auto; padding-block:32px 64px;}
+.back{display:inline-flex; align-items:center; gap:6px; color:var(--accent); text-decoration:none; font-size:13px; font-weight:600; margin-bottom:18px;}
+.back:hover{text-decoration:underline;}
+h1{
+  font-family:"Fraunces",Georgia,serif; font-weight:600;
+  font-size:clamp(26px,4vw,34px); margin:0 0 6px; text-wrap:balance;
+}
+.sub{color:var(--fg-muted); margin:0 0 4px; font-size:15px; line-height:1.5; max-width:62ch;}
+.badge{
+  display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600;
+  letter-spacing:.04em; text-transform:uppercase; color:var(--accent);
+  background:var(--accent-soft); border-radius:999px; padding:4px 10px; margin-top:14px;
+}
+.tabs{display:flex; gap:8px; margin:28px 0 18px; border-bottom:1px solid var(--border);}
+.tab{
+  font-family:inherit; font-size:14px; font-weight:600; color:var(--fg-muted);
+  background:none; border:none; padding:10px 4px; cursor:pointer; position:relative;
+  border-bottom:2px solid transparent; margin-right:18px;
+}
+.tab[aria-selected="true"]{color:var(--fg); border-bottom-color:var(--accent);}
+.panel{display:none;}
+.panel.active{display:block;}
+.card{
+  background:var(--surface); border:1px solid var(--border); border-radius:14px;
+  box-shadow:var(--shadow); padding:20px;
+}
+.card + .card{margin-top:16px;}
+.card h2{font-size:15px; font-weight:600; margin:0 0 2px;}
+.card .hint{color:var(--fg-muted); font-size:13px; margin:0 0 14px;}
+.chips{display:flex; flex-wrap:wrap; gap:6px; min-height:28px; margin-bottom:14px;}
+.chip{
+  display:inline-flex; align-items:center; gap:6px; background:var(--good-soft); color:var(--good);
+  border-radius:999px; padding:5px 6px 5px 12px; font-size:13px; font-weight:600;
+}
+.chip button{
+  all:unset; cursor:pointer; width:18px; height:18px; display:grid; place-items:center;
+  border-radius:50%; color:var(--good); font-size:13px; line-height:1;
+}
+.chip button:hover{background:rgba(0,0,0,.08);}
+.chip.empty{background:var(--chip); color:var(--fg-muted); font-weight:400;}
+
+/* --- Option A: grouped checklist --- */
+.all-row{
+  display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid var(--border);
+  border-radius:10px; background:var(--surface-2); margin-bottom:10px; cursor:pointer;
+}
+.region{border:1px solid var(--border); border-radius:10px; margin-bottom:8px; overflow:hidden;}
+.region-head{
+  display:flex; align-items:center; gap:10px; padding:10px 12px; cursor:pointer; background:var(--surface);
+}
+.region-head:hover{background:var(--surface-2);}
+.region-head .name{font-weight:600; font-size:14px; flex:1;}
+.region-head .count{font-size:12px; color:var(--fg-muted); font-family:"IBM Plex Mono",monospace;}
+.chevron{transition:transform .15s ease; color:var(--fg-muted); flex:0 0 auto;}
+.region.open .chevron{transform:rotate(90deg);}
+.muni-list{display:none; padding:4px 12px 12px 40px; flex-direction:column; gap:6px;}
+.region.open .muni-list{display:flex;}
+.muni-row{display:flex; align-items:center; gap:10px; font-size:13.5px; padding:4px 0;}
+input[type="checkbox"],input[type="radio"]{
+  width:17px; height:17px; accent-color:var(--good); flex:0 0 auto; cursor:pointer;
+}
+.state-indeterminate{opacity:.6;}
+
+/* --- Option B: visual tiles --- */
+.tile-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px;}
+.tile{
+  border:1.5px solid var(--border); border-radius:12px; padding:14px 12px; cursor:pointer;
+  background:var(--surface); display:flex; flex-direction:column; gap:8px; text-align:left;
+  font-family:inherit; color:var(--fg); transition:border-color .12s, background .12s;
+}
+.tile:hover{border-color:var(--accent);}
+.tile.selected{border-color:var(--good); background:var(--good-soft);}
+.tile .glyph{
+  width:30px; height:30px; border-radius:8px; display:grid; place-items:center;
+  background:var(--accent-soft); color:var(--accent); font-size:14px; font-weight:700;
+}
+.tile.selected .glyph{background:var(--good); color:#fff;}
+.tile .tname{font-weight:600; font-size:13.5px; line-height:1.25;}
+.tile .tcount{font-size:11.5px; color:var(--fg-muted); font-family:"IBM Plex Mono",monospace;}
+.refine{margin-top:16px; padding-top:14px; border-top:1px dashed var(--border);}
+.refine-head{font-size:12.5px; font-weight:600; color:var(--fg-muted); text-transform:uppercase; letter-spacing:.03em; margin:0 0 10px;}
+.refine-group{margin-bottom:10px;}
+.refine-group .rg-title{font-size:13px; font-weight:600; margin-bottom:6px;}
+.refine-chip-row{display:flex; flex-wrap:wrap; gap:6px;}
+.refine-chip{
+  font-size:12.5px; padding:5px 10px; border-radius:999px; border:1px solid var(--border);
+  background:var(--surface); cursor:pointer; color:var(--fg-muted);
+}
+.refine-chip.on{background:var(--good); color:#fff; border-color:var(--good);}
+
+.rec{
+  background:var(--surface); border:1px solid var(--border); border-left:4px solid var(--accent);
+  border-radius:0 12px 12px 0; padding:18px 20px; margin-top:28px;
+}
+.rec h3{margin:0 0 8px; font-size:14px; font-family:"Fraunces",serif;}
+.rec p{margin:0 0 8px; font-size:14px; color:var(--fg-muted); line-height:1.55;}
+.rec p:last-child{margin-bottom:0;}
+.rec strong{color:var(--fg);}
+
+.company-sec{margin-top:36px;}
+.company-sec h2{font-family:"Fraunces",serif; font-weight:600; font-size:17px; margin:0 0 4px;}
+.company-sec .sub{margin-bottom:16px;}
+
+footer{margin-top:40px; color:var(--fg-muted); font-size:12.5px; line-height:1.6; border-top:1px solid var(--border); padding-top:16px;}
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">&larr; Back to design review</a>
+  <h1>Work area selector — two options to review</h1>
+  <p class="sub">A click-through mock-up for KAN-130, built with placeholder municipality groupings. Nothing here is wired to real data or saved anywhere — it's for picking a UI direction before any programming starts.</p>
+  <span class="badge">Prototype · not connected to the app</span>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-tab="a">Option A — Grouped list</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="b">Option B — Visual tiles</button>
+  </div>
+
+  <!-- OPTION A -->
+  <div class="panel active" id="panel-a">
+    <div class="card">
+      <h2>Candidate — Work areas I'm willing to work in</h2>
+      <p class="hint">Multiple selections allowed. Picking a region selects every municipality inside it.</p>
+      <div class="chips" id="chips-a"></div>
+      <div class="all-row" id="all-a">
+        <input type="checkbox" id="all-a-cb">
+        <label for="all-a-cb" style="flex:1; font-weight:600; font-size:14px; cursor:pointer;">All of Iceland</label>
+      </div>
+      <div id="regions-a"></div>
+    </div>
+  </div>
+
+  <!-- OPTION B -->
+  <div class="panel" id="panel-b">
+    <div class="card">
+      <h2>Candidate — Work areas I'm willing to work in</h2>
+      <p class="hint">Tap a region tile to select the whole region, or refine to specific towns below.</p>
+      <div class="chips" id="chips-b"></div>
+      <div class="tile-grid" id="tiles-b"></div>
+      <div class="refine" id="refine-b" style="display:none;">
+        <p class="refine-head">Refine selected regions</p>
+        <div id="refine-groups-b"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rec">
+    <h3>Recommendation</h3>
+    <p><strong>Option A (grouped list)</strong> is the one I'd build first. With ~8 regions and roughly 64 municipalities, a searchable, collapsible list is faster to scan and select from than tiles, works identically on mobile, and needs far less design/build time than a true map-based picker.</p>
+    <p>Option B shows what a more visual version could look like — region tiles instead of a map, since an actually accurate clickable map of Iceland is a much bigger build for little real gain here (there are only 8 regions; a map mostly adds visual flair, not usability). Happy to build B instead, or offer both, if preferred.</p>
+  </div>
+
+  <div class="company-sec">
+    <h2>Company — Request location</h2>
+    <p class="sub">Same list, same data — single selection only, since a Staffing Request has one physical work location.</p>
+    <div class="card">
+      <div class="chips" id="chips-company"></div>
+      <div id="regions-company"></div>
+    </div>
+  </div>
+
+  <footer>
+    Placeholder region/municipality names below are illustrative groupings, not the final confirmed list — the exact list and spelling still need sign-off before this gets built for real.
+  </footer>
+</div>
+
+<script>
+const DATA = [
+  { id:'capital', name:'Höfuðborgarsvæðið (Capital Area)', glyph:'C', munis:['Reykjavík','Kópavogur','Hafnarfjörður','Garðabær','Mosfellsbær','Seltjarnarnes'] },
+  { id:'reykjanes', name:'Suðurnes (Reykjanes)', glyph:'S', munis:['Reykjanesbær','Grindavík','Suðurnesjabær','Vogar'] },
+  { id:'west', name:'Vesturland (West)', glyph:'V', munis:['Akranes','Borgarbyggð','Snæfellsbær','Dalabyggð'] },
+  { id:'westfjords', name:'Vestfirðir (Westfjords)', glyph:'W', munis:['Ísafjarðarbær','Bolungarvík','Vesturbyggð'] },
+  { id:'nw', name:'Norðurland vestra (Northwest)', glyph:'N', munis:['Húnaþing vestra','Skagafjörður','Blönduós'] },
+  { id:'ne', name:'Norðurland eystra (Northeast)', glyph:'N', munis:['Akureyri','Dalvíkurbyggð','Fjallabyggð'] },
+  { id:'east', name:'Austurland (East)', glyph:'E', munis:['Múlaþing','Fjarðabyggð','Vopnafjörður'] },
+  { id:'south', name:'Suðurland (South)', glyph:'S', munis:['Árborg','Vestmannaeyjar','Hornafjörður','Rangárþing'] },
+];
+
+function muniId(region, muni){ return region.id + '::' + muni; }
+
+function makeState(){ return { all:false, munis:new Set() }; }
+
+/* ---------- Option A: grouped checklist, multi-select, with All-of-Iceland + region = all munis ---------- */
+const stateA = makeState();
+
+function regionFullyIn(region, set){ return region.munis.every(m => set.has(muniId(region,m))); }
+function regionPartiallyIn(region, set){ return region.munis.some(m => set.has(muniId(region,m))) && !regionFullyIn(region,set); }
+
+function renderRegionsA(){
+  const root = document.getElementById('regions-a');
+  root.innerHTML = '';
+  DATA.forEach(region => {
+    const wrap = document.createElement('div');
+    wrap.className = 'region';
+    wrap.dataset.region = region.id;
+
+    const head = document.createElement('div');
+    head.className = 'region-head';
+    const full = regionFullyIn(region, stateA.munis);
+    const partial = regionPartiallyIn(region, stateA.munis);
+    head.innerHTML = `
+      <input type="checkbox" class="region-cb" ${full && !stateA.all ? 'checked' : ''} ${stateA.all ? 'checked disabled' : ''}>
+      <span class="name">${region.name}</span>
+      <span class="count">${region.munis.length} areas</span>
+      <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    `;
+    if(partial && !full){ head.querySelector('.region-cb').classList.add('state-indeterminate'); head.querySelector('.region-cb').indeterminate = true; }
+
+    const cb = head.querySelector('.region-cb');
+    cb.addEventListener('click', e => {
+      e.stopPropagation();
+      if(stateA.all) return;
+      const willSelect = !regionFullyIn(region, stateA.munis);
+      region.munis.forEach(m => willSelect ? stateA.munis.add(muniId(region,m)) : stateA.munis.delete(muniId(region,m)));
+      renderAll();
+    });
+    head.addEventListener('click', e => { if(e.target !== cb){ wrap.classList.toggle('open'); } });
+
+    const list = document.createElement('div');
+    list.className = 'muni-list';
+    region.munis.forEach(m => {
+      const row = document.createElement('label');
+      row.className = 'muni-row';
+      const checked = stateA.all || stateA.munis.has(muniId(region,m));
+      row.innerHTML = `<input type="checkbox" ${checked ? 'checked':''} ${stateA.all ? 'disabled':''}> ${m}`;
+      row.querySelector('input').addEventListener('change', () => {
+        if(stateA.munis.has(muniId(region,m))) stateA.munis.delete(muniId(region,m));
+        else stateA.munis.add(muniId(region,m));
+        renderAll();
+      });
+      list.appendChild(row);
+    });
+
+    wrap.appendChild(head);
+    wrap.appendChild(list);
+    root.appendChild(wrap);
+  });
+}
+
+function renderChipsA(){
+  const box = document.getElementById('chips-a');
+  box.innerHTML = '';
+  if(stateA.all){
+    box.innerHTML = `<span class="chip">All of Iceland <button data-clear-all>×</button></span>`;
+    box.querySelector('[data-clear-all]').addEventListener('click', () => { stateA.all = false; renderAll(); });
+    return;
+  }
+  if(stateA.munis.size === 0){ box.innerHTML = `<span class="chip empty">No areas selected yet</span>`; return; }
+  DATA.forEach(region => {
+    if(regionFullyIn(region, stateA.munis)){
+      const c = document.createElement('span'); c.className='chip';
+      c.innerHTML = `${region.name.split(' (')[0]} (all) <button>×</button>`;
+      c.querySelector('button').addEventListener('click', () => { region.munis.forEach(m=>stateA.munis.delete(muniId(region,m))); renderAll(); });
+      box.appendChild(c);
+    } else {
+      region.munis.forEach(m => {
+        if(stateA.munis.has(muniId(region,m))){
+          const c = document.createElement('span'); c.className='chip';
+          c.innerHTML = `${m} <button>×</button>`;
+          c.querySelector('button').addEventListener('click', () => { stateA.munis.delete(muniId(region,m)); renderAll(); });
+          box.appendChild(c);
+        }
+      });
+    }
+  });
+}
+
+document.getElementById('all-a-cb').addEventListener('change', e => { stateA.all = e.target.checked; if(stateA.all) stateA.munis.clear(); renderAll(); });
+
+function renderAll(){ renderRegionsA(); renderChipsA(); }
+
+/* ---------- Option B: visual tiles ---------- */
+const stateB = { selectedRegions:new Set(), refineMunis:new Set() };
+
+function renderTilesB(){
+  const grid = document.getElementById('tiles-b');
+  grid.innerHTML = '';
+  DATA.forEach(region => {
+    const btn = document.createElement('button');
+    btn.className = 'tile' + (stateB.selectedRegions.has(region.id) ? ' selected' : '');
+    btn.innerHTML = `<span class="glyph">${region.glyph}</span><span class="tname">${region.name.split(' (')[0]}</span><span class="tcount">${region.munis.length} areas</span>`;
+    btn.addEventListener('click', () => {
+      if(stateB.selectedRegions.has(region.id)){
+        stateB.selectedRegions.delete(region.id);
+        region.munis.forEach(m => stateB.refineMunis.delete(muniId(region,m)));
+      } else {
+        stateB.selectedRegions.add(region.id);
+      }
+      renderB();
+    });
+    grid.appendChild(btn);
+  });
+}
+
+function renderRefineB(){
+  const wrap = document.getElementById('refine-b');
+  const groups = document.getElementById('refine-groups-b');
+  groups.innerHTML = '';
+  if(stateB.selectedRegions.size === 0){ wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+  DATA.filter(r => stateB.selectedRegions.has(r.id)).forEach(region => {
+    const g = document.createElement('div');
+    g.className = 'refine-group';
+    g.innerHTML = `<div class="rg-title">${region.name.split(' (')[0]} — whole region selected, tap to narrow</div>`;
+    const row = document.createElement('div');
+    row.className = 'refine-chip-row';
+    region.munis.forEach(m => {
+      const c = document.createElement('button');
+      const id = muniId(region,m);
+      const narrowed = stateB.refineMunis.has(id);
+      c.className = 'refine-chip' + (narrowed ? ' on' : '');
+      c.textContent = m;
+      c.addEventListener('click', () => { narrowed ? stateB.refineMunis.delete(id) : stateB.refineMunis.add(id); renderB(); });
+      row.appendChild(c);
+    });
+    g.appendChild(row);
+    groups.appendChild(g);
+  });
+}
+
+function renderChipsB(){
+  const box = document.getElementById('chips-b');
+  box.innerHTML = '';
+  if(stateB.selectedRegions.size === 0){ box.innerHTML = `<span class="chip empty">No areas selected yet</span>`; return; }
+  DATA.filter(r => stateB.selectedRegions.has(r.id)).forEach(region => {
+    const narrowedList = region.munis.filter(m => stateB.refineMunis.has(muniId(region,m)));
+    const label = narrowedList.length ? narrowedList.join(', ') : region.name.split(' (')[0] + ' (whole region)';
+    const c = document.createElement('span'); c.className='chip';
+    c.innerHTML = `${label} <button>×</button>`;
+    c.querySelector('button').addEventListener('click', () => { stateB.selectedRegions.delete(region.id); region.munis.forEach(m=>stateB.refineMunis.delete(muniId(region,m))); renderB(); });
+    box.appendChild(c);
+  });
+}
+
+function renderB(){ renderTilesB(); renderRefineB(); renderChipsB(); }
+
+/* ---------- Company: single-select variant of the grouped list ---------- */
+let companySelected = null; // muniId string, or region id for "whole region"
+
+function renderCompany(){
+  const root = document.getElementById('regions-company');
+  root.innerHTML = '';
+  DATA.forEach(region => {
+    const wrap = document.createElement('div');
+    wrap.className = 'region open';
+    const head = document.createElement('div');
+    head.className = 'region-head';
+    head.innerHTML = `<span class="name">${region.name.split(' (')[0]}</span><span class="count">${region.munis.length} areas</span>`;
+    wrap.appendChild(head);
+    const list = document.createElement('div');
+    list.className = 'muni-list';
+    region.munis.forEach(m => {
+      const id = muniId(region,m);
+      const row = document.createElement('label');
+      row.className = 'muni-row';
+      row.innerHTML = `<input type="radio" name="company-area" ${companySelected===id?'checked':''}> ${m}`;
+      row.querySelector('input').addEventListener('change', () => { companySelected = id; renderCompany(); });
+      list.appendChild(row);
+    });
+    wrap.appendChild(list);
+    root.appendChild(wrap);
+  });
+  const chips = document.getElementById('chips-company');
+  if(!companySelected){ chips.innerHTML = `<span class="chip empty">No location selected yet</span>`; return; }
+  const [, name] = companySelected.split('::');
+  chips.innerHTML = `<span class="chip">${name} <button>×</button></span>`;
+  chips.querySelector('button').addEventListener('click', () => { companySelected = null; renderCompany(); });
+}
+
+/* ---------- tabs ---------- */
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t===tab ? 'true':'false'));
+    document.getElementById('panel-a').classList.toggle('active', tab.dataset.tab==='a');
+    document.getElementById('panel-b').classList.toggle('active', tab.dataset.tab==='b');
+  });
+});
+
+renderAll();
+renderB();
+renderCompany();
+</script>
+</body>
+</html>
