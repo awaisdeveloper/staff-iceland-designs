@@ -274,6 +274,14 @@ function renderB(){
     });
     regionEl.querySelector('.dropdown-region-head').addEventListener('click', e=>{
       if(e.target.type !== 'checkbox'){
+        // Stop this click from reaching the document-level "click outside
+        // closes the panel" listener below. renderB() replaces the panel's
+        // innerHTML synchronously, detaching e.target from the DOM before
+        // the click finishes bubbling — without this, the document
+        // listener's closest('.dropdown-select') check then fails on the
+        // now-parentless node and wrongly treats this as an outside click,
+        // closing the whole dropdown instead of just expanding the region.
+        e.stopPropagation();
         openRegionsB.has(region.id) ? openRegionsB.delete(region.id) : openRegionsB.add(region.id);
         renderB();
       }
