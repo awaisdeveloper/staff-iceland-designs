@@ -111,7 +111,6 @@ input, select{
 }
 .chip button{all:unset; cursor:pointer; width:16px; height:16px; display:grid; place-items:center; font-size:.78rem;}
 .chip.empty{background:var(--page-bg); color:var(--muted); font-weight:400;}
-.multi-native{min-height:180px;}
 .field-hint{color:var(--muted); font-size:.8rem; margin:6px 0 0;}
 
 .btn{
@@ -173,20 +172,13 @@ footer{color:var(--muted); font-size:.78rem; margin-top:36px; border-top:1px sol
           <div class="area-field-label">
             <label class="f" style="font-size:.85rem; color:var(--ink); font-weight:700;">Work areas I'm willing to work in <span class="opt">— replaces "Preferred Work Location"</span></label>
             <div class="opt-tabs" role="tablist">
-              <button type="button" class="opt-tab" aria-selected="true" data-opt="a">A — Select box</button>
-              <button type="button" class="opt-tab" aria-selected="false" data-opt="b">B — Grouped list</button>
-              <button type="button" class="opt-tab" aria-selected="false" data-opt="c">C — Visual tiles</button>
+              <button type="button" class="opt-tab" aria-selected="true" data-opt="a">A — Grouped list</button>
+              <button type="button" class="opt-tab" aria-selected="false" data-opt="b">B — Visual tiles</button>
             </div>
           </div>
 
-          <!-- Option A: native multi-select with optgroups -->
+          <!-- Option A: grouped checklist dropdown (reuses the site's existing dropdown-select component) -->
           <div class="opt-panel" data-panel="a">
-            <select multiple class="multi-native" id="area-select-a"></select>
-            <p class="field-hint">Native multi-select. Cheapest to build, but selecting several areas needs Ctrl/Cmd-click (or long-press on mobile) — not obvious to most users.</p>
-          </div>
-
-          <!-- Option B: grouped checklist dropdown (reuses the site's existing dropdown-select component) -->
-          <div class="opt-panel" data-panel="b" style="display:none;">
             <div class="chips" id="chips-b"></div>
             <div class="dropdown-select">
               <button type="button" class="dropdown-select-trigger" id="trigger-b">Select work areas…</button>
@@ -195,8 +187,8 @@ footer{color:var(--muted); font-size:.78rem; margin-top:36px; border-top:1px sol
             <p class="field-hint">Same dropdown component already used for Job Category / Shift Types on this form — ticking a region selects every municipality inside it.</p>
           </div>
 
-          <!-- Option C: visual region tiles -->
-          <div class="opt-panel" data-panel="c" style="display:none;">
+          <!-- Option B: visual region tiles -->
+          <div class="opt-panel" data-panel="b" style="display:none;">
             <div class="chips" id="chips-c"></div>
             <div class="tile-grid" id="tiles-c"></div>
             <div class="refine" id="refine-c" style="display:none;"></div>
@@ -248,19 +240,21 @@ document.querySelectorAll('.opt-tab').forEach(tab=>{
   });
 });
 
-/* ---- Option A: native select with optgroups ---- */
-const selA = document.getElementById('area-select-a');
-selA.innerHTML = DATA.map(r => `<optgroup label="${r.name}">${r.munis.map(m=>`<option value="${muniId(r,m)}">${m}</option>`).join('')}</optgroup>`).join('');
-
-/* ---- Option B: grouped dropdown checklist, multi-select ---- */
+/* ---- Option A: grouped dropdown checklist, multi-select ---- */
 const stateB = new Set();
+// Which regions are expanded — tracked here, not read off the DOM, because
+// renderB() rebuilds the panel's innerHTML on every checkbox change (to
+// keep "N selected" / region tri-state in sync); a class toggled directly
+// on the old DOM node would otherwise be thrown away on every re-render,
+// collapsing the group back shut after each pick.
+const openRegionsB = new Set();
 function regionFullB(r){ return r.munis.every(m=>stateB.has(muniId(r,m))); }
 function renderB(){
   const panel = document.getElementById('panel-b');
   panel.className = 'dropdown-select-panel' + (panel.classList.contains('open') ? ' open':'');
   panel.innerHTML = DATA.map(r=>{
     const full = regionFullB(r);
-    return `<div class="dropdown-region" data-region="${r.id}">
+    return `<div class="dropdown-region${openRegionsB.has(r.id) ? ' open' : ''}" data-region="${r.id}">
       <div class="dropdown-region-head">
         <input type="checkbox" class="region-cb" ${full?'checked':''}>
         <span class="name">${r.name.split(' (')[0]}</span>
@@ -279,7 +273,10 @@ function renderB(){
       renderB();
     });
     regionEl.querySelector('.dropdown-region-head').addEventListener('click', e=>{
-      if(e.target.type !== 'checkbox'){ regionEl.classList.toggle('open'); }
+      if(e.target.type !== 'checkbox'){
+        openRegionsB.has(region.id) ? openRegionsB.delete(region.id) : openRegionsB.add(region.id);
+        renderB();
+      }
     });
     regionEl.querySelectorAll('.muni-row input').forEach(cb=>{
       cb.addEventListener('change', ()=>{

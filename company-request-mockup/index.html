@@ -52,7 +52,6 @@ body{margin:0; background:var(--page-bg); color:var(--ink); font-family:"Helveti
 }
 .opt-tab[aria-selected="true"]{background:var(--blue); color:#fff; border-color:var(--blue);}
 
-select.single-native{min-height:34px;}
 .field-hint{color:var(--muted); font-size:.78rem; margin:8px 0 0;}
 
 .dropdown-select{position:relative; min-width:0;}
@@ -106,7 +105,7 @@ footer{color:var(--muted); font-size:.78rem; margin-top:24px; border-top:1px sol
 <div class="proto-banner">Prototype for KAN-130 review — not connected to the real app · <a href="../index.html">Back to design review</a></div>
 <div class="container">
   <h1 class="admin-heading">Post a Job</h1>
-  <p class="admin-subheading">The real Company Request form's field grid, with "Municipality / area" replaced below by the single-select work area field. Use the A / B / C switch to compare the three options — a Company picks exactly one location.</p>
+  <p class="admin-subheading">The real Company Request form's field grid, with "Municipality / area" replaced below by the single-select work area field. Use the A / B switch to compare the two options — a Company picks exactly one location.</p>
 
   <div class="admin-card">
     <form onsubmit="return showToast(event)">
@@ -130,32 +129,23 @@ footer{color:var(--muted); font-size:.78rem; margin-top:24px; border-top:1px sol
             <div class="area-field-label">
               <span class="ttl">Municipality / area <span class="note">— replaces free-text "Municipality / area"</span></span>
               <div class="opt-tabs" role="tablist">
-                <button type="button" class="opt-tab" aria-selected="true" data-opt="a">A — Select box</button>
-                <button type="button" class="opt-tab" aria-selected="false" data-opt="b">B — Grouped list</button>
-                <button type="button" class="opt-tab" aria-selected="false" data-opt="c">C — Visual tiles</button>
+                <button type="button" class="opt-tab" aria-selected="true" data-opt="a">A — Grouped list</button>
+                <button type="button" class="opt-tab" aria-selected="false" data-opt="b">B — Visual tiles</button>
               </div>
             </div>
 
-            <!-- Option A: native single select with optgroups -->
+            <!-- Option A: grouped dropdown, single-select (radio) -->
             <div class="opt-panel" data-panel="a">
-              <select class="single-native" id="area-select-a">
-                <option value="">Select a municipality…</option>
-              </select>
-              <p class="field-hint">Native single select. Simplest to build — one tap/click, no multi-select ambiguity since a Company only needs one.</p>
-            </div>
-
-            <!-- Option B: grouped dropdown, single-select (radio) -->
-            <div class="opt-panel" data-panel="b" style="display:none;">
               <div class="chip-single empty" id="chip-b">No location selected yet</div>
               <div class="dropdown-select">
                 <button type="button" class="dropdown-select-trigger" id="trigger-b">Select a municipality…</button>
                 <div class="dropdown-select-panel" id="panel-b"></div>
               </div>
-              <p class="field-hint">Same dropdown-list component as Option A on the Candidate form, scoped to a single pick here.</p>
+              <p class="field-hint">Same dropdown-list component as the Candidate form uses, scoped to a single pick here.</p>
             </div>
 
-            <!-- Option C: visual region tiles, single-select -->
-            <div class="opt-panel" data-panel="c" style="display:none;">
+            <!-- Option B: visual region tiles, single-select -->
+            <div class="opt-panel" data-panel="b" style="display:none;">
               <div class="chip-single empty" id="chip-c">No location selected yet</div>
               <div class="tile-grid" id="tiles-c"></div>
               <div class="refine-c" id="refine-c" style="display:none;"></div>
@@ -208,10 +198,7 @@ document.querySelectorAll('.opt-tab').forEach(tab=>{
   });
 });
 
-/* Option A */
-document.getElementById('area-select-a').innerHTML += DATA.map(r=>`<optgroup label="${r.name}">${r.munis.map(m=>`<option value="${muniId(r,m)}">${m}</option>`).join('')}</optgroup>`).join('');
-
-/* Option B: grouped radio list */
+/* Option A: grouped radio list */
 let pickB = null;
 function renderB(){
   const panel = document.getElementById('panel-b');
