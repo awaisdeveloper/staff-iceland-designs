@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Candidate Registration — Work Area (KAN-130)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+:root{
+  --page-bg:#F4F6F9; --surface:#FFFFFF; --ink:#101625; --muted:#69728A;
+  --navy:#0F1C3F; --blue:#2E86DE; --red:#E63328; --border:#E1E5EC;
+  --good:#2E8648; --good-soft:rgba(46,134,72,.12);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --page-bg:#0B0F17; --surface:#131826; --ink:#EEF0F5; --muted:#9096A8; --border:#232B3C;
+    --good-soft:rgba(46,134,72,.18);
+  }
+}
+*{box-sizing:border-box;}
+body{margin:0; background:var(--page-bg); color:var(--ink); font-family:"Helvetica Neue","Arial",system-ui,sans-serif;}
+.container{max-width:820px; margin:0 auto; padding:0 24px 80px;}
+.proto-banner{
+  background:var(--navy); color:#fff; padding:12px 24px; font-family:Verdana,sans-serif;
+  font-size:.78rem; letter-spacing:.04em; text-transform:uppercase; text-align:center;
+}
+.proto-banner a{color:#9FC6FA; text-decoration:underline;}
+.section-head{max-width:680px; margin:40px 0 32px;}
+.label{font-family:Verdana,sans-serif; font-size:.68rem; letter-spacing:.18em; text-transform:uppercase; color:var(--red);}
+h1{
+  font-family:"Arial Black","Helvetica Neue",system-ui,sans-serif; font-weight:900; letter-spacing:-.01em;
+  font-size:clamp(1.7rem,3.4vw,2.3rem); margin:14px 0 10px; text-wrap:balance;
+}
+.section-head p{color:var(--muted); margin:0; font-size:1rem; max-width:56ch;}
+form{display:grid; gap:16px; max-width:780px;}
+.row-2{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px; align-items:start;}
+.field{display:grid; gap:6px;}
+label.f{font-size:.78rem; color:var(--muted); font-family:Verdana,sans-serif; letter-spacing:.03em;}
+input, select{
+  background:var(--page-bg); border:1px solid var(--border); color:var(--ink); padding:13px 14px;
+  font-family:"Helvetica Neue",sans-serif; font-size:.95rem; width:100%;
+}
+.field > select{max-width:420px;}
+.opt{color:var(--muted); font-weight:400; font-size:.78rem;}
+
+.checklist{
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:8px 16px;
+  border:1px solid var(--border); background:var(--page-bg); padding:14px; max-height:200px; overflow-y:auto;
+}
+.checklist-item{display:flex; align-items:flex-start; gap:8px; font-size:.88rem; color:var(--ink); cursor:pointer;}
+.checklist-item input{width:auto; padding:0; flex-shrink:0; margin-top:3px;}
+.dropdown-select{position:relative; min-width:0;}
+.dropdown-select-trigger{
+  background:var(--page-bg); border:1px solid var(--border); color:var(--ink); padding:13px 14px;
+  font-family:"Helvetica Neue",sans-serif; font-size:.95rem; width:100%; text-align:left; cursor:pointer;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.dropdown-select-panel{
+  display:none; position:relative; margin-top:6px; z-index:5; background:var(--surface);
+  border:1px solid var(--border); box-shadow:0 10px 28px rgba(0,0,0,.14);
+}
+.dropdown-select-panel.open{display:block;}
+.dropdown-region{border-bottom:1px solid var(--border);}
+.dropdown-region:last-child{border-bottom:none;}
+.dropdown-region-head{
+  display:flex; align-items:center; gap:10px; padding:10px 14px; cursor:pointer; background:var(--surface);
+}
+.dropdown-region-head:hover{background:var(--page-bg);}
+.dropdown-region-head .name{font-weight:700; font-size:.85rem; flex:1;}
+.dropdown-region-head .count{font-size:.72rem; color:var(--muted);}
+.dropdown-region-head input{width:auto; flex-shrink:0;}
+.dropdown-region .munis{display:none; flex-direction:column; padding:2px 14px 10px 38px; gap:6px;}
+.dropdown-region.open .munis{display:flex;}
+.dropdown-region .muni-row{display:flex; align-items:center; gap:8px; font-size:.85rem;}
+.dropdown-region .muni-row input{width:auto;}
+.chevron{transition:transform .15s; color:var(--muted); flex:0 0 auto;}
+.dropdown-region.open .chevron{transform:rotate(90deg);}
+
+.tile-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:8px;}
+.tile{
+  border:1.5px solid var(--border); border-radius:8px; padding:12px 10px; cursor:pointer;
+  background:var(--surface); display:flex; flex-direction:column; gap:6px; text-align:left;
+  font-family:inherit; color:var(--ink);
+}
+.tile:hover{border-color:var(--blue);}
+.tile.selected{border-color:var(--good); background:var(--good-soft);}
+.tile .tname{font-weight:700; font-size:.82rem; line-height:1.25;}
+.tile .tcount{font-size:.72rem; color:var(--muted);}
+.refine{margin-top:10px; padding-top:10px; border-top:1px dashed var(--border);}
+.refine-group .rg-title{font-size:.78rem; font-weight:700; margin-bottom:6px; color:var(--muted);}
+.refine-chip-row{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px;}
+.refine-chip{
+  font-size:.76rem; padding:5px 10px; border-radius:999px; border:1px solid var(--border);
+  background:var(--surface); cursor:pointer; color:var(--muted);
+}
+.refine-chip.on{background:var(--good); color:#fff; border-color:var(--good);}
+
+.area-field{border:1px solid var(--border); background:var(--surface); padding:16px; border-radius:4px;}
+.area-field-label{display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:12px;}
+.area-field-label label.f{margin:0;}
+.opt-tabs{display:flex; gap:6px;}
+.opt-tab{
+  font-family:Verdana,sans-serif; font-size:.68rem; letter-spacing:.03em; text-transform:uppercase;
+  border:1px solid var(--border); background:var(--page-bg); color:var(--muted); padding:6px 10px;
+  cursor:pointer; border-radius:3px;
+}
+.opt-tab[aria-selected="true"]{background:var(--navy); color:#fff; border-color:var(--navy);}
+.chips{display:flex; flex-wrap:wrap; gap:6px; min-height:24px; margin-bottom:10px;}
+.chip{
+  display:inline-flex; align-items:center; gap:6px; background:var(--good-soft); color:var(--good);
+  border-radius:999px; padding:4px 5px 4px 11px; font-size:.78rem; font-weight:700;
+}
+.chip button{all:unset; cursor:pointer; width:16px; height:16px; display:grid; place-items:center; font-size:.78rem;}
+.chip.empty{background:var(--page-bg); color:var(--muted); font-weight:400;}
+.multi-native{min-height:180px;}
+.field-hint{color:var(--muted); font-size:.8rem; margin:6px 0 0;}
+
+.btn{
+  display:inline-block; padding:15px 30px; font-family:"Arial Black",sans-serif; font-size:.85rem;
+  letter-spacing:.04em; text-transform:uppercase; text-decoration:none; cursor:pointer; border:2px solid transparent;
+  background:var(--red); color:#fff; width:max-content; margin-top:8px;
+}
+.toast{
+  position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--navy); color:#fff;
+  padding:12px 20px; border-radius:6px; font-size:.85rem; opacity:0; transition:opacity .2s; pointer-events:none;
+}
+.toast.show{opacity:1;}
+footer{color:var(--muted); font-size:.78rem; margin-top:36px; border-top:1px solid var(--border); padding-top:16px; line-height:1.6;}
+@media (max-width:620px){.row-2{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="proto-banner">Prototype for KAN-130 review — not connected to the real app · <a href="../index.html">Back to design review</a></div>
+<div class="container">
+  <div class="section-head">
+    <span class="label">Candidate Registration</span>
+    <h1>Register as a candidate</h1>
+    <p>This is the real registration form's field order and styling, with the work-area selection shown below in place of the old free-text "Preferred Work Location" field. Use the A / B / C switch to compare the three options.</p>
+  </div>
+
+  <form onsubmit="return showToast(event)">
+    <div class="row-2">
+      <div class="field">
+        <label class="f">Full name</label>
+        <input type="text" value="Thomas Jefferson" readonly>
+      </div>
+      <div class="field">
+        <label class="f">Kennitala</label>
+        <input type="text" value="010190-1269" readonly>
+      </div>
+    </div>
+    <div class="row-2">
+      <div class="field">
+        <label class="f">Phone</label>
+        <input type="tel" value="+354 555 0123" readonly>
+      </div>
+      <div class="field">
+        <label class="f">Email</label>
+        <input type="email" value="thomas.jefferson@example.com" readonly>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="f">Job category</label>
+      <div class="dropdown-select">
+        <button type="button" class="dropdown-select-trigger" disabled>Cleaning</button>
+      </div>
+    </div>
+
+    <div class="row-2">
+      <!-- ============ WORK AREA FIELD — the part under review ============ -->
+      <div class="field" style="grid-column:1/-1;">
+        <div class="area-field">
+          <div class="area-field-label">
+            <label class="f" style="font-size:.85rem; color:var(--ink); font-weight:700;">Work areas I'm willing to work in <span class="opt">— replaces "Preferred Work Location"</span></label>
+            <div class="opt-tabs" role="tablist">
+              <button type="button" class="opt-tab" aria-selected="true" data-opt="a">A — Select box</button>
+              <button type="button" class="opt-tab" aria-selected="false" data-opt="b">B — Grouped list</button>
+              <button type="button" class="opt-tab" aria-selected="false" data-opt="c">C — Visual tiles</button>
+            </div>
+          </div>
+
+          <!-- Option A: native multi-select with optgroups -->
+          <div class="opt-panel" data-panel="a">
+            <select multiple class="multi-native" id="area-select-a"></select>
+            <p class="field-hint">Native multi-select. Cheapest to build, but selecting several areas needs Ctrl/Cmd-click (or long-press on mobile) — not obvious to most users.</p>
+          </div>
+
+          <!-- Option B: grouped checklist dropdown (reuses the site's existing dropdown-select component) -->
+          <div class="opt-panel" data-panel="b" style="display:none;">
+            <div class="chips" id="chips-b"></div>
+            <div class="dropdown-select">
+              <button type="button" class="dropdown-select-trigger" id="trigger-b">Select work areas…</button>
+              <div class="dropdown-select-panel" id="panel-b"></div>
+            </div>
+            <p class="field-hint">Same dropdown component already used for Job Category / Shift Types on this form — ticking a region selects every municipality inside it.</p>
+          </div>
+
+          <!-- Option C: visual region tiles -->
+          <div class="opt-panel" data-panel="c" style="display:none;">
+            <div class="chips" id="chips-c"></div>
+            <div class="tile-grid" id="tiles-c"></div>
+            <div class="refine" id="refine-c" style="display:none;"></div>
+            <p class="field-hint">Tap a region tile to select it whole, or refine to specific towns underneath.</p>
+          </div>
+        </div>
+      </div>
+      <!-- ============ end work area field ============ -->
+    </div>
+
+    <div class="row-2">
+      <div class="field">
+        <label class="f">Available from</label>
+        <input type="date" value="2026-12-01" readonly>
+      </div>
+      <div class="field">
+        <label class="f">Employment type</label>
+        <select disabled><option>Full time</option></select>
+      </div>
+    </div>
+
+    <button type="submit" class="btn">Submit application</button>
+  </form>
+
+  <footer>
+    Fields shown greyed-out/read-only are sample context from the real form, not editable here — only the work-area field is interactive. Municipality/region groupings are placeholders pending sign-off.
+  </footer>
+</div>
+<div class="toast" id="toast">This is a prototype — nothing is submitted.</div>
+
+<script>
+const DATA = [
+  { id:'capital', name:'Höfuðborgarsvæðið (Capital Area)', munis:['Reykjavík','Kópavogur','Hafnarfjörður','Garðabær','Mosfellsbær','Seltjarnarnes'] },
+  { id:'reykjanes', name:'Suðurnes (Reykjanes)', munis:['Reykjanesbær','Grindavík','Suðurnesjabær','Vogar'] },
+  { id:'west', name:'Vesturland (West)', munis:['Akranes','Borgarbyggð','Snæfellsbær','Dalabyggð'] },
+  { id:'westfjords', name:'Vestfirðir (Westfjords)', munis:['Ísafjarðarbær','Bolungarvík','Vesturbyggð'] },
+  { id:'nw', name:'Norðurland vestra (Northwest)', munis:['Húnaþing vestra','Skagafjörður','Blönduós'] },
+  { id:'ne', name:'Norðurland eystra (Northeast)', munis:['Akureyri','Dalvíkurbyggð','Fjallabyggð'] },
+  { id:'east', name:'Austurland (East)', munis:['Múlaþing','Fjarðabyggð','Vopnafjörður'] },
+  { id:'south', name:'Suðurland (South)', munis:['Árborg','Vestmannaeyjar','Hornafjörður','Rangárþing'] },
+];
+function muniId(r,m){ return r.id+'::'+m; }
+
+/* ---- tabs ---- */
+document.querySelectorAll('.opt-tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.opt-tab').forEach(t=>t.setAttribute('aria-selected', t===tab?'true':'false'));
+    document.querySelectorAll('.opt-panel').forEach(p=>p.style.display = p.dataset.panel===tab.dataset.opt ? '' : 'none');
+  });
+});
+
+/* ---- Option A: native select with optgroups ---- */
+const selA = document.getElementById('area-select-a');
+selA.innerHTML = DATA.map(r => `<optgroup label="${r.name}">${r.munis.map(m=>`<option value="${muniId(r,m)}">${m}</option>`).join('')}</optgroup>`).join('');
+
+/* ---- Option B: grouped dropdown checklist, multi-select ---- */
+const stateB = new Set();
+function regionFullB(r){ return r.munis.every(m=>stateB.has(muniId(r,m))); }
+function renderB(){
+  const panel = document.getElementById('panel-b');
+  panel.className = 'dropdown-select-panel' + (panel.classList.contains('open') ? ' open':'');
+  panel.innerHTML = DATA.map(r=>{
+    const full = regionFullB(r);
+    return `<div class="dropdown-region" data-region="${r.id}">
+      <div class="dropdown-region-head">
+        <input type="checkbox" class="region-cb" ${full?'checked':''}>
+        <span class="name">${r.name.split(' (')[0]}</span>
+        <span class="count">${r.munis.length}</span>
+        <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="munis">${r.munis.map(m=>`<label class="muni-row"><input type="checkbox" data-muni="${muniId(r,m)}" ${stateB.has(muniId(r,m))?'checked':''}> ${m}</label>`).join('')}</div>
+    </div>`;
+  }).join('');
+  panel.querySelectorAll('.dropdown-region').forEach(regionEl=>{
+    const region = DATA.find(r=>r.id===regionEl.dataset.region);
+    regionEl.querySelector('.region-cb').addEventListener('click', e=>{
+      e.stopPropagation();
+      const willSelect = !regionFullB(region);
+      region.munis.forEach(m => willSelect ? stateB.add(muniId(region,m)) : stateB.delete(muniId(region,m)));
+      renderB();
+    });
+    regionEl.querySelector('.dropdown-region-head').addEventListener('click', e=>{
+      if(e.target.type !== 'checkbox'){ regionEl.classList.toggle('open'); }
+    });
+    regionEl.querySelectorAll('.muni-row input').forEach(cb=>{
+      cb.addEventListener('change', ()=>{
+        const id = cb.dataset.muni;
+        cb.checked ? stateB.add(id) : stateB.delete(id);
+        renderB();
+      });
+    });
+  });
+  const trigger = document.getElementById('trigger-b');
+  trigger.textContent = stateB.size === 0 ? 'Select work areas…' : stateB.size + ' area(s) selected';
+  trigger.onclick = ()=>{ document.getElementById('panel-b').classList.toggle('open'); };
+  const chips = document.getElementById('chips-b');
+  if(stateB.size===0){ chips.innerHTML = `<span class="chip empty">No areas selected yet</span>`; return; }
+  chips.innerHTML='';
+  DATA.forEach(r=>{
+    if(regionFullB(r)){
+      chips.innerHTML += `<span class="chip">${r.name.split(' (')[0]} (all)</span>`;
+    } else {
+      r.munis.forEach(m=>{ if(stateB.has(muniId(r,m))) chips.innerHTML += `<span class="chip">${m}</span>`; });
+    }
+  });
+}
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.dropdown-select')){ document.getElementById('panel-b').classList.remove('open'); }
+});
+renderB();
+
+/* ---- Option C: visual tiles, multi-select with refine ---- */
+const stateC = { regions:new Set(), refine:new Set() };
+function renderC(){
+  document.getElementById('tiles-c').innerHTML = DATA.map(r=>`
+    <button type="button" class="tile ${stateC.regions.has(r.id)?'selected':''}" data-region="${r.id}">
+      <span class="tname">${r.name.split(' (')[0]}</span><span class="tcount">${r.munis.length} areas</span>
+    </button>`).join('');
+  document.querySelectorAll('#tiles-c .tile').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.dataset.region;
+      const region = DATA.find(r=>r.id===id);
+      if(stateC.regions.has(id)){ stateC.regions.delete(id); region.munis.forEach(m=>stateC.refine.delete(muniId(region,m))); }
+      else { stateC.regions.add(id); }
+      renderC();
+    });
+  });
+  const refineBox = document.getElementById('refine-c');
+  const selected = DATA.filter(r=>stateC.regions.has(r.id));
+  if(selected.length===0){ refineBox.style.display='none'; } else {
+    refineBox.style.display='block';
+    refineBox.innerHTML = selected.map(r=>`
+      <div class="refine-group">
+        <div class="rg-title">${r.name.split(' (')[0]} — tap to narrow</div>
+        <div class="refine-chip-row">${r.munis.map(m=>`<button type="button" class="refine-chip ${stateC.refine.has(muniId(r,m))?'on':''}" data-id="${muniId(r,m)}">${m}</button>`).join('')}</div>
+      </div>`).join('');
+    refineBox.querySelectorAll('.refine-chip').forEach(chip=>{
+      chip.addEventListener('click', ()=>{
+        const id = chip.dataset.id;
+        stateC.refine.has(id) ? stateC.refine.delete(id) : stateC.refine.add(id);
+        renderC();
+      });
+    });
+  }
+  const chips = document.getElementById('chips-c');
+  if(selected.length===0){ chips.innerHTML = `<span class="chip empty">No areas selected yet</span>`; return; }
+  chips.innerHTML = selected.map(r=>{
+    const narrowed = r.munis.filter(m=>stateC.refine.has(muniId(r,m)));
+    return `<span class="chip">${narrowed.length ? narrowed.join(', ') : r.name.split(' (')[0]+' (whole region)'}</span>`;
+  }).join('');
+}
+renderC();
+
+function showToast(e){
+  e.preventDefault();
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+  return false;
+}
+</script>
+</body>
+</html>

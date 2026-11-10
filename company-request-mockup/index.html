@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Company Request — Work Area (KAN-130)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+:root{
+  --page-bg:#F4F6F9; --surface:#FFFFFF; --ink:#101625; --muted:#69728A;
+  --navy:#0F1C3F; --blue:#2E86DE; --blue-dark:#1F6BB8; --red:#E63328; --border:#E1E5EC;
+  --radius:14px; --shadow:0 1px 2px rgba(16,22,37,.04), 0 8px 24px -12px rgba(16,22,37,.10);
+  --good:#2E8648; --good-soft:#EAF6EE;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --page-bg:#0B0F17; --surface:#131826; --ink:#EEF0F5; --muted:#9096A8; --border:#232B3C;
+    --good-soft:rgba(46,134,72,.16);
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+  }
+}
+*{box-sizing:border-box;}
+body{margin:0; background:var(--page-bg); color:var(--ink); font-family:"Helvetica Neue","Arial",system-ui,sans-serif;}
+.container{max-width:880px; margin:0 auto; padding:0 24px 80px;}
+.proto-banner{
+  background:var(--navy); color:#fff; padding:12px 24px; font-family:Verdana,sans-serif;
+  font-size:.78rem; letter-spacing:.04em; text-transform:uppercase; text-align:center;
+}
+.proto-banner a{color:#9FC6FA; text-decoration:underline;}
+.admin-heading{font-size:1.4rem; font-weight:800; margin:40px 0 6px; color:var(--ink);}
+.admin-subheading{color:var(--muted); margin:0 0 24px; font-size:.92rem; max-width:60ch;}
+.admin-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); padding:22px; margin-bottom:20px;}
+.admin-form-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:16px;}
+@media (max-width:760px){.admin-form-grid{grid-template-columns:1fr;}}
+.admin-field{display:flex; flex-direction:column; gap:5px; min-width:0;}
+.admin-field label{font-size:.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; font-weight:700;}
+.admin-field input, .admin-field select{
+  border:1px solid var(--border); border-radius:9px; padding:9px 11px; font-size:.88rem;
+  font-family:inherit; background:var(--page-bg); color:var(--ink); width:100%;
+}
+.admin-field input:disabled, .admin-field select:disabled{opacity:.6;}
+
+.area-cell{grid-column:1 / -1;}
+.area-field{border:1px solid var(--border); background:var(--page-bg); padding:14px; border-radius:9px;}
+.area-field-label{display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:10px;}
+.area-field-label .ttl{font-size:.78rem; color:var(--ink); font-weight:700; text-transform:none;}
+.area-field-label .ttl .note{color:var(--muted); font-weight:400; text-transform:none;}
+.opt-tabs{display:flex; gap:6px;}
+.opt-tab{
+  font-size:.7rem; letter-spacing:.02em; text-transform:uppercase; font-weight:700;
+  border:1px solid var(--border); background:var(--surface); color:var(--muted); padding:5px 9px;
+  cursor:pointer; border-radius:7px;
+}
+.opt-tab[aria-selected="true"]{background:var(--blue); color:#fff; border-color:var(--blue);}
+
+select.single-native{min-height:34px;}
+.field-hint{color:var(--muted); font-size:.78rem; margin:8px 0 0;}
+
+.dropdown-select{position:relative; min-width:0;}
+.dropdown-select-trigger{
+  border:1px solid var(--border); border-radius:9px; padding:9px 11px; font-size:.88rem;
+  width:100%; font-family:inherit; background:var(--surface); color:var(--ink);
+  text-align:left; cursor:pointer;
+}
+.dropdown-select-panel{
+  display:none; margin-top:6px; background:var(--surface); border:1px solid var(--border);
+  border-radius:9px; box-shadow:var(--shadow); max-height:260px; overflow-y:auto;
+}
+.dropdown-select-panel.open{display:block;}
+.region-block{border-bottom:1px solid var(--border);}
+.region-block:last-child{border-bottom:none;}
+.region-title{padding:9px 12px 4px; font-size:.72rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.03em;}
+.muni-radio-row{display:flex; align-items:center; gap:8px; font-size:.85rem; padding:5px 12px 5px 20px; cursor:pointer;}
+.muni-radio-row:hover{background:var(--page-bg);}
+.muni-radio-row input{width:auto;}
+
+.tile-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:8px;}
+.tile{
+  border:1.5px solid var(--border); border-radius:9px; padding:10px 10px; cursor:pointer;
+  background:var(--surface); display:flex; flex-direction:column; gap:4px; text-align:left;
+  font-family:inherit; color:var(--ink);
+}
+.tile:hover{border-color:var(--blue);}
+.tile.selected{border-color:var(--good); background:var(--good-soft);}
+.tile .tname{font-weight:700; font-size:.8rem;}
+.tile .tcount{font-size:.7rem; color:var(--muted);}
+.refine-c{margin-top:10px; padding-top:10px; border-top:1px dashed var(--border);}
+.refine-c .rg-title{font-size:.76rem; font-weight:700; margin-bottom:6px; color:var(--muted);}
+.refine-c .muni-radio-row{padding-left:0;}
+
+.chip-single{display:inline-flex; align-items:center; gap:6px; background:var(--good-soft); color:var(--good); border-radius:999px; padding:4px 11px; font-size:.78rem; font-weight:700; margin-bottom:10px;}
+.chip-single.empty{background:var(--surface); color:var(--muted); font-weight:400; border:1px dashed var(--border);}
+
+.admin-btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:6px; background:var(--blue); color:#fff; border:none; padding:10px 16px;
+  border-radius:10px; font-size:.85rem; font-weight:600; cursor:pointer; font-family:inherit;
+}
+.toast{
+  position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--navy); color:#fff;
+  padding:12px 20px; border-radius:6px; font-size:.85rem; opacity:0; transition:opacity .2s; pointer-events:none;
+}
+.toast.show{opacity:1;}
+footer{color:var(--muted); font-size:.78rem; margin-top:24px; border-top:1px solid var(--border); padding-top:16px; line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="proto-banner">Prototype for KAN-130 review — not connected to the real app · <a href="../index.html">Back to design review</a></div>
+<div class="container">
+  <h1 class="admin-heading">Post a Job</h1>
+  <p class="admin-subheading">The real Company Request form's field grid, with "Municipality / area" replaced below by the single-select work area field. Use the A / B / C switch to compare the three options — a Company picks exactly one location.</p>
+
+  <div class="admin-card">
+    <form onsubmit="return showToast(event)">
+      <div class="admin-form-grid">
+        <div class="admin-field">
+          <label>Number of workers needed</label>
+          <input type="number" value="3" disabled>
+        </div>
+        <div class="admin-field">
+          <label>Work location — street address</label>
+          <input type="text" value="Laugavegur 11" disabled>
+        </div>
+        <div class="admin-field">
+          <label>Postal code</label>
+          <input type="text" value="101" disabled>
+        </div>
+
+        <!-- ============ WORK AREA FIELD — the part under review ============ -->
+        <div class="admin-field area-cell">
+          <div class="area-field">
+            <div class="area-field-label">
+              <span class="ttl">Municipality / area <span class="note">— replaces free-text "Municipality / area"</span></span>
+              <div class="opt-tabs" role="tablist">
+                <button type="button" class="opt-tab" aria-selected="true" data-opt="a">A — Select box</button>
+                <button type="button" class="opt-tab" aria-selected="false" data-opt="b">B — Grouped list</button>
+                <button type="button" class="opt-tab" aria-selected="false" data-opt="c">C — Visual tiles</button>
+              </div>
+            </div>
+
+            <!-- Option A: native single select with optgroups -->
+            <div class="opt-panel" data-panel="a">
+              <select class="single-native" id="area-select-a">
+                <option value="">Select a municipality…</option>
+              </select>
+              <p class="field-hint">Native single select. Simplest to build — one tap/click, no multi-select ambiguity since a Company only needs one.</p>
+            </div>
+
+            <!-- Option B: grouped dropdown, single-select (radio) -->
+            <div class="opt-panel" data-panel="b" style="display:none;">
+              <div class="chip-single empty" id="chip-b">No location selected yet</div>
+              <div class="dropdown-select">
+                <button type="button" class="dropdown-select-trigger" id="trigger-b">Select a municipality…</button>
+                <div class="dropdown-select-panel" id="panel-b"></div>
+              </div>
+              <p class="field-hint">Same dropdown-list component as Option A on the Candidate form, scoped to a single pick here.</p>
+            </div>
+
+            <!-- Option C: visual region tiles, single-select -->
+            <div class="opt-panel" data-panel="c" style="display:none;">
+              <div class="chip-single empty" id="chip-c">No location selected yet</div>
+              <div class="tile-grid" id="tiles-c"></div>
+              <div class="refine-c" id="refine-c" style="display:none;"></div>
+              <p class="field-hint">Tap a region, then pick its municipality below.</p>
+            </div>
+          </div>
+        </div>
+        <!-- ============ end work area field ============ -->
+
+        <div class="admin-field">
+          <label>Work mode</label>
+          <select disabled><option>Onsite</option></select>
+        </div>
+        <div class="admin-field">
+          <label>Working hours — start</label>
+          <input type="time" value="09:00" disabled>
+        </div>
+        <div class="admin-field">
+          <label>Working hours — end</label>
+          <input type="time" value="17:00" disabled>
+        </div>
+      </div>
+      <button type="submit" class="admin-btn">Post request</button>
+    </form>
+  </div>
+
+  <footer>
+    Disabled fields are sample context copied from the real form — only the work-area field is interactive. Municipality/region groupings are placeholders pending sign-off.
+  </footer>
+</div>
+<div class="toast" id="toast">This is a prototype — nothing is submitted.</div>
+
+<script>
+const DATA = [
+  { id:'capital', name:'Höfuðborgarsvæðið (Capital Area)', munis:['Reykjavík','Kópavogur','Hafnarfjörður','Garðabær','Mosfellsbær','Seltjarnarnes'] },
+  { id:'reykjanes', name:'Suðurnes (Reykjanes)', munis:['Reykjanesbær','Grindavík','Suðurnesjabær','Vogar'] },
+  { id:'west', name:'Vesturland (West)', munis:['Akranes','Borgarbyggð','Snæfellsbær','Dalabyggð'] },
+  { id:'westfjords', name:'Vestfirðir (Westfjords)', munis:['Ísafjarðarbær','Bolungarvík','Vesturbyggð'] },
+  { id:'nw', name:'Norðurland vestra (Northwest)', munis:['Húnaþing vestra','Skagafjörður','Blönduós'] },
+  { id:'ne', name:'Norðurland eystra (Northeast)', munis:['Akureyri','Dalvíkurbyggð','Fjallabyggð'] },
+  { id:'east', name:'Austurland (East)', munis:['Múlaþing','Fjarðabyggð','Vopnafjörður'] },
+  { id:'south', name:'Suðurland (South)', munis:['Árborg','Vestmannaeyjar','Hornafjörður','Rangárþing'] },
+];
+function muniId(r,m){ return r.id+'::'+m; }
+
+document.querySelectorAll('.opt-tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.opt-tab').forEach(t=>t.setAttribute('aria-selected', t===tab?'true':'false'));
+    document.querySelectorAll('.opt-panel').forEach(p=>p.style.display = p.dataset.panel===tab.dataset.opt ? '' : 'none');
+  });
+});
+
+/* Option A */
+document.getElementById('area-select-a').innerHTML += DATA.map(r=>`<optgroup label="${r.name}">${r.munis.map(m=>`<option value="${muniId(r,m)}">${m}</option>`).join('')}</optgroup>`).join('');
+
+/* Option B: grouped radio list */
+let pickB = null;
+function renderB(){
+  const panel = document.getElementById('panel-b');
+  panel.innerHTML = DATA.map(r=>`
+    <div class="region-block">
+      <div class="region-title">${r.name.split(' (')[0]}</div>
+      ${r.munis.map(m=>`<label class="muni-radio-row"><input type="radio" name="area-b" ${pickB===muniId(r,m)?'checked':''} data-id="${muniId(r,m)}"> ${m}</label>`).join('')}
+    </div>`).join('');
+  panel.querySelectorAll('input[type=radio]').forEach(r=>{
+    r.addEventListener('change', ()=>{ pickB = r.dataset.id; renderB(); });
+  });
+  document.getElementById('trigger-b').onclick = ()=>panel.classList.toggle('open');
+  const chip = document.getElementById('chip-b');
+  if(!pickB){ chip.className='chip-single empty'; chip.textContent='No location selected yet'; return; }
+  chip.className='chip-single'; chip.textContent = pickB.split('::')[1];
+}
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.dropdown-select')){ document.getElementById('panel-b').classList.remove('open'); }
+});
+renderB();
+
+/* Option C: tiles -> pick one municipality within chosen region */
+let openRegionC = null, pickC = null;
+function renderC(){
+  document.getElementById('tiles-c').innerHTML = DATA.map(r=>`
+    <button type="button" class="tile ${openRegionC===r.id?'selected':''}" data-region="${r.id}">
+      <span class="tname">${r.name.split(' (')[0]}</span><span class="tcount">${r.munis.length} areas</span>
+    </button>`).join('');
+  document.querySelectorAll('#tiles-c .tile').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ openRegionC = btn.dataset.region; renderC(); });
+  });
+  const refineBox = document.getElementById('refine-c');
+  if(!openRegionC){ refineBox.style.display='none'; }
+  else {
+    const region = DATA.find(r=>r.id===openRegionC);
+    refineBox.style.display='block';
+    refineBox.innerHTML = `<div class="rg-title">${region.name.split(' (')[0]} — pick a municipality</div>` +
+      region.munis.map(m=>`<label class="muni-radio-row"><input type="radio" name="area-c" ${pickC===muniId(region,m)?'checked':''} data-id="${muniId(region,m)}"> ${m}</label>`).join('');
+    refineBox.querySelectorAll('input[type=radio]').forEach(r=>{
+      r.addEventListener('change', ()=>{ pickC = r.dataset.id; renderC(); });
+    });
+  }
+  const chip = document.getElementById('chip-c');
+  if(!pickC){ chip.className='chip-single empty'; chip.textContent='No location selected yet'; }
+  else { chip.className='chip-single'; chip.textContent = pickC.split('::')[1]; }
+}
+renderC();
+
+function showToast(e){
+  e.preventDefault();
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+  return false;
+}
+</script>
+</body>
+</html>
