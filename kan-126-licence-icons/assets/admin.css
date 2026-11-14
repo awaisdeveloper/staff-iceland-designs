@@ -1,0 +1,478 @@
+/**
+ * Shared stylesheet for the Admin, Candidate and Company portals —
+ * "Modern Minimal" design system (client-approved 2026-09-24, see
+ * admin-designs/01-modern-minimal/). Same class names as before this
+ * rewrite (no blade markup changes required for the visual refresh
+ * itself), restyled onto Modern Minimal's tokens with light/dark support.
+ *
+ * Developed by: M. Awais
+ * Email: awais.sidd.ma@gmail.com
+ * Upwork: https://www.upwork.com/freelancers/muhammadawais152
+ */
+
+:root{
+  --page-bg:#F4F6F9; --surface:#FFFFFF; --ink:#101625; --muted:#69728A;
+  --navy:#0F1C3F; --blue:#2E86DE; --blue-dark:#1F6BB8; --red:#E63328; --border:#E1E5EC;
+  --green:#2E8648; --green-soft:#EAF6EE; --amber:#B45309; --amber-soft:#FEF3E2;
+  --blue-soft:#EAF3FC; --red-soft:#FDEEED;
+  --radius:14px; --shadow:0 1px 2px rgba(16,22,37,.04), 0 8px 24px -12px rgba(16,22,37,.10);
+  /* Legacy alias — a few older inline styles still reference --bg directly. */
+  --bg:var(--page-bg);
+}
+:root[data-theme="dark"]{
+  --page-bg:#0B0F17; --surface:#131826; --ink:#EEF0F5; --muted:#9096A8; --border:#232B3C;
+  --green-soft:rgba(46,134,72,.16); --amber-soft:rgba(180,83,9,.18); --blue-soft:rgba(46,134,222,.16); --red-soft:rgba(230,51,40,.16);
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --page-bg:#0B0F17; --surface:#131826; --ink:#EEF0F5; --muted:#9096A8; --border:#232B3C;
+    --green-soft:rgba(46,134,72,.16); --amber-soft:rgba(180,83,9,.18); --blue-soft:rgba(46,134,222,.16); --red-soft:rgba(230,51,40,.16);
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.55);
+  }
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--page-bg); color:var(--ink);
+  font-family:'Inter',-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:14px; line-height:1.5;
+}
+a{color:var(--blue-dark); text-decoration:none;}
+a:hover{text-decoration:underline;}
+:focus-visible{outline:2px solid var(--red); outline-offset:2px;}
+
+/* Shared by the company/candidate portal topbars (few nav links, no
+   grouping needed) and the admin sidebar below (many permission-gated
+   modules — see .admin-shell / .admin-sidebar). */
+.admin-brand{display:flex; align-items:center; gap:10px; font-weight:700; flex-shrink:0; color:var(--ink);}
+.admin-brand img{height:26px;}
+
+.admin-topbar{
+  background:var(--surface); color:var(--ink); border-bottom:1px solid var(--border); padding:0 24px; display:flex;
+  align-items:center; justify-content:space-between; height:60px; position:relative;
+  flex-wrap:wrap;
+}
+.admin-nav-toggle-input, .admin-nav-toggle-label{display:none;}
+.admin-nav-wrap{display:flex; align-items:center; gap:22px;}
+.admin-nav{display:flex; gap:22px; flex-wrap:wrap;}
+.admin-nav a{color:var(--muted); font-size:.88rem; font-weight:600; white-space:nowrap;}
+.admin-nav a.active, .admin-nav a:hover{color:var(--blue-dark); text-decoration:none;}
+/* Candidate portal only — a submitted, still-unverified Candidate's nav
+   links beyond Dashboard/Profile's logout area (candidate.layouts.app).
+   Not a real <a>, so there's nothing to click regardless of CSS. */
+.admin-nav-disabled{color:var(--muted); font-size:.88rem; font-weight:600; white-space:nowrap; opacity:.4; cursor:not-allowed;}
+.admin-logout{display:flex; align-items:center; gap:10px;}
+.admin-logout a.active, .admin-logout a:hover{color:var(--blue-dark) !important; text-decoration:none;}
+.admin-logout button{background:transparent; border:1px solid var(--border); color:var(--ink); padding:7px 14px; border-radius:9px; font-size:.82rem; cursor:pointer; white-space:nowrap; font-family:inherit;}
+.admin-logout button:hover{background:var(--page-bg);}
+
+/* Theme toggle button — shared by the admin sidebar footer, the
+   candidate/company topbars and all three login pages (public/js/
+   theme-toggle.js drives the icon swap + data-theme attribute). */
+.theme-toggle{
+  width:38px; height:38px; border-radius:10px; background:var(--surface); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink); flex-shrink:0;
+}
+.theme-toggle:hover{background:var(--page-bg);}
+.theme-toggle svg{width:17px; height:17px;}
+.theme-toggle .icon-moon{display:block;}
+.theme-toggle .icon-sun{display:none;}
+:root[data-theme="dark"] .theme-toggle .icon-moon{display:none;}
+:root[data-theme="dark"] .theme-toggle .icon-sun{display:block;}
+
+@media (max-width:760px){
+  .admin-nav-toggle-label{display:block; color:var(--ink); font-size:1.6rem; cursor:pointer; line-height:1; padding:14px 0;}
+  .admin-nav-wrap{
+    position:absolute; top:100%; left:0; right:0; z-index:100; background:var(--surface); border-bottom:1px solid var(--border);
+    flex-direction:column; align-items:flex-start; gap:16px;
+    padding:8px 24px 22px; display:none;
+  }
+  .admin-nav-toggle-input:checked ~ .admin-nav-wrap{display:flex;}
+  .admin-nav{flex-direction:column; gap:14px; width:100%;}
+  .admin-logout{width:100%; flex-direction:column; align-items:flex-start; gap:12px;}
+  .admin-logout a{margin-right:0 !important;}
+  .admin-logout button{width:100%; padding:9px 14px;}
+}
+
+/* Admin panel only: left sidebar replacing the topbar above, since the
+   module count grows past what a horizontal nav can hold cleanly. */
+.admin-shell{display:flex; min-height:100vh;}
+.admin-sidebar-toggle-input{display:none;}
+
+.admin-sidebar{
+  width:260px; flex-shrink:0; background:var(--surface); color:var(--ink); border-right:1px solid var(--border);
+  display:flex; flex-direction:column; position:sticky; top:0; height:100vh; overflow-y:auto; z-index:100;
+}
+.admin-sidebar .admin-brand{padding:18px 20px; flex-shrink:0; border-bottom:1px solid var(--border);}
+.admin-sidebar .admin-brand img{flex-shrink:0;}
+
+.admin-sidebar-nav{flex:1; padding:14px 12px; display:flex; flex-direction:column; gap:2px; overflow-y:auto;}
+/* Slim, theme-aware scrollbar for the sidebar nav — invisible until the
+   list actually overflows, then a soft pill that darkens slightly on
+   hover instead of the browser's bulky default. Firefox via
+   scrollbar-width/-color, everything else via the WebKit pseudo-elements. */
+.admin-sidebar, .admin-sidebar-nav{
+  scrollbar-width:thin;
+  scrollbar-color:var(--border) transparent;
+}
+.admin-sidebar::-webkit-scrollbar, .admin-sidebar-nav::-webkit-scrollbar{width:6px;}
+.admin-sidebar::-webkit-scrollbar-track, .admin-sidebar-nav::-webkit-scrollbar-track{background:transparent;}
+.admin-sidebar::-webkit-scrollbar-thumb, .admin-sidebar-nav::-webkit-scrollbar-thumb{
+  background:var(--border); border-radius:999px;
+}
+.admin-sidebar:hover::-webkit-scrollbar-thumb, .admin-sidebar-nav:hover::-webkit-scrollbar-thumb{
+  background:var(--muted);
+}
+.admin-sidebar-nav a{
+  display:flex; align-items:center; gap:10px;
+  color:var(--ink); font-size:.88rem; font-weight:500; padding:9px 12px; border-radius:10px; white-space:nowrap;
+}
+.admin-sidebar-nav a svg{width:18px; height:18px; flex-shrink:0; opacity:.75;}
+.admin-sidebar-nav a:hover{background:var(--page-bg);}
+.admin-sidebar-nav a.active{background:var(--blue-soft); color:var(--blue-dark); font-weight:600;}
+.admin-sidebar-nav a.active svg{opacity:1;}
+.admin-sidebar-section{
+  color:var(--muted); font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+  padding:16px 12px 6px;
+}
+.admin-sidebar-section:first-of-type{padding-top:4px;}
+
+/* Nav accordion — groups with sub-pages (Employees, Company), using the
+   native <details>/<summary> so no extra JS is needed for expand/collapse. */
+.admin-nav-accordion{border-radius:10px;}
+.admin-nav-accordion summary{
+  list-style:none; cursor:pointer; display:flex; align-items:center; gap:10px;
+  padding:9px 12px; border-radius:10px; font-size:.88rem; font-weight:500; color:var(--ink);
+}
+.admin-nav-accordion summary::-webkit-details-marker{display:none;}
+.admin-nav-accordion summary:hover{background:var(--page-bg);}
+.admin-nav-accordion summary svg.admin-nav-icon{width:18px; height:18px; flex-shrink:0; opacity:.75;}
+.admin-nav-accordion summary .admin-nav-chevron{margin-left:auto; width:14px; height:14px; transition:transform .15s ease; opacity:.6;}
+.admin-nav-accordion[open] summary .admin-nav-chevron{transform:rotate(90deg);}
+.admin-nav-accordion.active summary{background:var(--blue-soft); color:var(--blue-dark); font-weight:600;}
+.admin-nav-children{display:flex; flex-direction:column; gap:1px; padding:2px 0 4px 30px;}
+.admin-nav-children a{display:block; padding:7px 12px; border-radius:8px; font-size:.83rem; color:var(--muted); white-space:nowrap;}
+.admin-nav-children a:hover{background:var(--page-bg); color:var(--ink);}
+.admin-nav-children a.active{background:var(--blue-soft); color:var(--blue-dark); font-weight:600;}
+
+.admin-sidebar-footer{border-top:1px solid var(--border); padding:14px 12px; display:flex; flex-direction:column; gap:8px; flex-shrink:0;}
+.admin-sidebar-footer a{color:var(--ink); font-size:.85rem; padding:8px 12px; border-radius:8px;}
+.admin-sidebar-footer a:hover, .admin-sidebar-footer a.active{background:var(--page-bg);}
+.admin-sidebar-footer button{
+  background:transparent; border:1px solid var(--border); color:var(--ink); padding:8px 12px; border-radius:8px;
+  font-size:.85rem; cursor:pointer; width:100%; text-align:left; font-family:inherit;
+}
+.admin-sidebar-footer button:hover{background:var(--page-bg);}
+.admin-sidebar-footer-row{display:flex; align-items:center; gap:8px;}
+.admin-sidebar-footer-row .theme-toggle{width:34px; height:34px; flex-shrink:0;}
+
+.admin-sidebar-backdrop{display:none;}
+
+.admin-main{flex:1; min-width:0;}
+.admin-mobile-topbar{display:none;}
+
+.admin-wrap{max-width:1200px; margin:0 auto; padding:32px 24px 60px;}
+@media (max-width:600px){
+  .admin-wrap{padding:22px 16px 40px;}
+}
+
+@media (max-width:900px){
+  .admin-sidebar{
+    position:fixed; left:0; top:0; transform:translateX(-100%);
+    transition:transform .2s ease; box-shadow:4px 0 24px rgba(0,0,0,.25); z-index:110;
+  }
+  .admin-sidebar-toggle-input:checked ~ .admin-sidebar{transform:translateX(0);}
+  .admin-sidebar-toggle-input:checked ~ .admin-sidebar-backdrop{
+    display:block; position:fixed; inset:0; background:rgba(9,12,20,.45); z-index:105;
+  }
+  .admin-mobile-topbar{
+    display:flex; align-items:center; gap:14px; background:var(--surface); border-bottom:1px solid var(--border); padding:0 20px; height:56px; flex-shrink:0;
+  }
+  .admin-mobile-topbar img{height:24px;}
+  .admin-sidebar-toggle-label{display:block; color:var(--ink); font-size:1.6rem; cursor:pointer; line-height:1;}
+}
+.admin-heading{font-size:1.4rem; font-weight:800; margin:0 0 6px; color:var(--ink);}
+.admin-subheading{color:var(--muted); margin:0 0 28px; font-size:.92rem;}
+
+.admin-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); padding:22px; margin-bottom:20px;}
+.admin-toolbar{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:18px; align-items:end;}
+.admin-toolbar .admin-field input, .admin-toolbar .admin-field select{width:100%; min-width:0;}
+.admin-field{display:flex; flex-direction:column; gap:7px;}
+.admin-field label{font-size:.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; font-weight:700;}
+.admin-field input, .admin-field select, .admin-field textarea{
+  border:1px solid var(--border); border-radius:9px; padding:9px 11px; font-size:.88rem;
+  min-width:170px; font-family:inherit; background:var(--page-bg); color:var(--ink);
+}
+.admin-field input:focus, .admin-field select:focus, .admin-field textarea:focus{outline:2px solid var(--red); border-color:var(--red);}
+.admin-field input:disabled{opacity:.6; cursor:not-allowed;}
+/* A textarea must still read as a textarea, not a stretched single-line
+   input, regardless of how few rows its own `rows` attribute sets. */
+.admin-field textarea{min-height:110px; resize:vertical;}
+@media (max-width:900px){
+  .admin-toolbar{grid-template-columns:repeat(2,1fr);}
+}
+@media (max-width:600px){
+  .admin-toolbar{grid-template-columns:1fr;}
+}
+
+table.admin-table{width:100%; border-collapse:collapse; font-size:.87rem;}
+table.admin-table th{
+  text-align:left; padding:12px; border-bottom:1px solid var(--border); color:var(--muted); background:var(--page-bg);
+  font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; white-space:nowrap; font-weight:700;
+}
+table.admin-table td{padding:12px; border-bottom:1px solid var(--border); vertical-align:top;}
+table.admin-table tr:last-child td{border-bottom:none;}
+table.admin-table tr:hover td{background:var(--blue-soft);}
+.admin-empty{padding:40px; text-align:center; color:var(--muted);}
+
+.pill{display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border-radius:999px; font-size:.7rem; font-weight:700; white-space:nowrap;}
+.pill-yes{background:var(--green-soft); color:var(--green);}
+.pill-no{background:var(--red-soft); color:var(--red);}
+.pill-active{background:var(--green-soft); color:var(--green);}
+.pill-inactive{background:var(--border); color:var(--muted);}
+.pill-blue{background:var(--blue-soft); color:var(--blue-dark);}
+
+.admin-icon-btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:32px; height:32px; border-radius:8px; border:1px solid var(--border);
+  background:var(--surface); color:var(--muted); cursor:pointer; font-family:inherit; flex-shrink:0;
+}
+.admin-icon-btn svg{width:16px; height:16px;}
+.admin-icon-btn:hover{background:var(--blue-soft); color:var(--blue-dark); border-color:var(--blue); text-decoration:none;}
+.admin-icon-btn.danger:hover{background:var(--red-soft); color:var(--red); border-color:var(--red);}
+
+.admin-btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:6px; background:var(--blue); color:#fff; border:none; padding:10px 16px;
+  border-radius:10px; font-size:.85rem; font-weight:600; cursor:pointer; font-family:inherit;
+  box-shadow:0 4px 14px -4px rgba(46,134,222,.5);
+}
+.admin-btn:hover{background:var(--blue-dark); text-decoration:none;}
+.admin-btn-outline{background:transparent; color:var(--ink); border:1px solid var(--border); box-shadow:none;}
+.admin-btn-outline:hover{background:var(--page-bg);}
+.admin-btn-small{padding:6px 12px; font-size:.78rem;}
+.admin-btn-danger{background:var(--red); box-shadow:none;}
+.admin-btn-danger:hover{background:#c22a20;}
+
+.admin-pagination{margin-top:18px;}
+.admin-pagination-bar{
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+  margin-top:18px; padding-top:16px; border-top:1px solid var(--border);
+}
+.admin-pagination-summary{color:var(--muted); font-size:.82rem;}
+.admin-pagination-controls{display:flex; align-items:center; gap:12px;}
+.admin-pagination-page{color:var(--muted); font-size:.82rem; white-space:nowrap;}
+.admin-btn[disabled]{opacity:.45; cursor:not-allowed;}
+
+/* Fixed at 3 equal columns, deliberately not auto-fit/auto-fill — a grid
+   that auto-sizes its track count stretches whatever few fields land in
+   the last row (even a single lone one) to fill the entire row, which is
+   exactly the "field taking up full width" bug this fixes. A fixed column
+   count means a lone trailing field just occupies the first column and
+   leaves the rest of the row empty instead of stretching. Use
+   .field-full-width on the rare field that should deliberately span the
+   whole row (e.g. a paragraph-length notes field). */
+.admin-form-grid{display:grid; grid-template-columns:repeat(3,1fr); column-gap:20px; row-gap:26px; margin-bottom:16px;}
+.admin-form-grid .admin-field > input{width:100%; min-width:0;}
+/* A grid item's automatic minimum width otherwise defaults to its
+   content's min-content size (e.g. a long unbroken comma-joined selection
+   label), which can force this column — and the whole row/page — wider
+   than intended even though the trigger button itself has overflow:hidden
+   set. min-width:0 here lets that overflow rule actually take effect. */
+.admin-form-grid > .admin-field{min-width:0;}
+.field-full-width{grid-column:1 / -1;}
+@media (max-width:900px){
+  .admin-form-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media (max-width:600px){
+  .admin-form-grid{grid-template-columns:1fr;}
+}
+/* Opt-in 2-per-row variant for a form that reads better with wider
+   fields (e.g. the candidate Profile page) — add alongside .admin-form-grid,
+   never in place of it, so the base 3-column rule stays the default
+   everywhere else. */
+.admin-form-grid.admin-form-grid-2{grid-template-columns:repeat(2,1fr);}
+@media (max-width:600px){
+  .admin-form-grid.admin-form-grid-2{grid-template-columns:1fr;}
+}
+/* Page-level 2-column card layout (e.g. candidate Profile) — a fixed
+   column count, not auto-fit, so a 3rd card placed after the first row
+   (like "Change password" below "Your details"/"Availability details")
+   auto-flows into column 1 of a new row at exactly one column's width,
+   rather than the grid recalculating to 3 even columns. align-items
+   defaults to stretch, so cards sharing a row match each other's height. */
+.admin-columns-2{display:grid; grid-template-columns:repeat(2,1fr); gap:20px;}
+@media (max-width:700px){
+  .admin-columns-2{grid-template-columns:1fr;}
+}
+
+.admin-checkbox{display:flex; align-items:center; gap:8px; font-size:.88rem;}
+
+/* Multi-select dropdown (collapsible checklist) — same component as the
+   public site's .dropdown-select/.checklist (app.css), reimplemented here
+   with the admin panel's own tokens since admin pages don't load app.css. */
+.dropdown-select{position:relative; min-width:0;}
+.dropdown-select-trigger{
+  border:1px solid var(--border); border-radius:9px; padding:9px 11px; font-size:.88rem;
+  width:100%; font-family:inherit; background:var(--page-bg); color:var(--ink);
+  text-align:left; cursor:pointer; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.dropdown-select-trigger:focus{outline:2px solid var(--red); outline-offset:1px;}
+.dropdown-select-panel{
+  position:absolute; top:calc(100% + 4px); left:0; right:0; z-index:20; background:var(--surface);
+  border:1px solid var(--border); border-radius:9px; box-shadow:var(--shadow);
+}
+.checklist{
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:6px 14px;
+  padding:12px; max-height:220px; overflow-y:auto;
+}
+.dropdown-select-panel .checklist{grid-template-columns:1fr;}
+.checklist-item{display:flex; align-items:flex-start; gap:8px; font-size:.85rem; color:var(--ink); cursor:pointer;}
+.checklist-item input{width:auto; min-width:20px; flex-shrink:0; margin-top:3px;}
+.checklist-item-disabled{opacity:.45; cursor:not-allowed;}
+.checklist-item-disabled input{cursor:not-allowed;}
+
+/* KAN-130 — grouped region/municipality picker (<x-municipality-picker>,
+   <x-work-area-picker>). A region header expands to show/select its own
+   municipalities, same visual language as .checklist above. */
+.dropdown-select-panel .dropdown-region{border-bottom:1px solid var(--border);}
+.dropdown-select-panel .dropdown-region:last-child{border-bottom:none;}
+.dropdown-region-head{
+  display:flex; align-items:center; gap:8px; padding:10px 12px; font-size:.85rem;
+  font-weight:600; color:var(--ink); cursor:pointer; user-select:none;
+}
+.dropdown-region-head input{width:auto; flex-shrink:0;}
+.dropdown-region-head .count{margin-left:auto; color:var(--muted); font-weight:400; font-size:.78rem;}
+.dropdown-region-head .chevron{flex-shrink:0; transition:transform .15s ease;}
+.dropdown-region.open .dropdown-region-head .chevron{transform:rotate(90deg);}
+.dropdown-region .munis{display:none; flex-direction:column; gap:2px; padding:0 12px 10px 34px;}
+.dropdown-region.open .munis{display:flex;}
+.muni-row{display:flex; align-items:center; gap:8px; font-size:.83rem; color:var(--ink); cursor:pointer; padding:3px 0;}
+.muni-row input{width:auto; flex-shrink:0;}
+.checklist-item-note{color:var(--muted); font-size:.78rem; margin:0;}
+
+.admin-error{color:var(--red); font-size:.8rem; margin-top:4px;}
+.admin-hint{color:var(--muted); font-size:.78rem; margin:4px 0 0;}
+.admin-banner{padding:12px 16px; border-radius:10px; font-size:.88rem; margin-bottom:18px;}
+.admin-banner-success{background:var(--green-soft); border:1px solid var(--green); color:var(--green);}
+.admin-banner-error{background:var(--red-soft); border:1px solid var(--red); color:var(--red);}
+
+/* KAN-128 registration wizard progress bar — same component as the
+   public site's version (app.css), reimplemented here with the admin
+   panel's own tokens since candidate portal pages load admin.css, not
+   app.css (same pattern as .dropdown-select/.checklist above). */
+.registration-progress{margin-bottom:20px;}
+.registration-progress-track{height:4px; border-radius:2px; background:var(--border); overflow:hidden;}
+.registration-progress-fill{height:100%; background:var(--blue); border-radius:2px; transition:width .2s ease;}
+.registration-progress-label{margin:10px 0 0; text-align:center; font-size:.85rem; color:var(--muted);}
+
+/* Login pages (all three guards) — centered card over a soft, blurred
+   color-blob background instead of the old solid navy fill. */
+.login-wrap{
+  min-height:100vh; display:flex; align-items:center; justify-content:center; background:var(--page-bg);
+  position:relative; overflow:hidden; padding:24px;
+}
+.login-blob{position:absolute; border-radius:50%; filter:blur(60px); opacity:.35; z-index:0;}
+.login-blob-1{width:420px; height:420px; background:var(--blue); top:-120px; left:-100px;}
+.login-blob-2{width:380px; height:380px; background:var(--red); bottom:-140px; right:-100px;}
+.login-theme-toggle{position:absolute; top:20px; right:20px; z-index:2;}
+.login-card{background:var(--surface); border:1px solid var(--border); box-shadow:var(--shadow); border-radius:var(--radius); padding:40px 36px; width:100%; max-width:400px; position:relative; z-index:1;}
+.login-logo{display:flex; justify-content:center; margin-bottom:24px;}
+.login-logo img{height:36px;}
+.login-card h1{font-size:1.15rem; text-align:center; margin:0 0 24px; color:var(--ink);}
+.login-field{margin-bottom:16px; display:flex; flex-direction:column; gap:6px;}
+.login-field label{font-size:.8rem; color:var(--muted);}
+.login-field input{border:1px solid var(--border); border-radius:9px; padding:10px 12px; font-size:.92rem; background:var(--page-bg); color:var(--ink); font-family:inherit;}
+.login-submit{width:100%; padding:11px; margin-top:8px;}
+
+/* KAN-127 — login-card content is unusually tall once e-ID is added
+   alongside the password form, so the secondary (password/resend)
+   sections collapse behind a <summary> by default, no JS required. */
+.login-links-row{display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-top:16px; font-size:.82rem;}
+.login-divider{display:flex; align-items:center; gap:12px; margin:22px 0; color:var(--muted); font-size:.78rem;}
+.login-divider::before, .login-divider::after{content:""; flex:1; height:1px; background:var(--border);}
+.login-details{margin-top:4px;}
+.login-details + .login-details{margin-top:14px; padding-top:14px; border-top:1px solid var(--border);}
+.login-details summary{
+  cursor:pointer; font-size:.84rem; color:var(--blue); font-weight:600; list-style:none;
+  display:flex; align-items:center; justify-content:center; gap:6px; padding:4px 0;
+}
+.login-details summary::-webkit-details-marker{display:none;}
+.login-details summary::after{content:"\25BE"; font-size:.7rem; transition:transform .15s ease;}
+.login-details[open] summary::after{transform:rotate(180deg);}
+.login-details summary:hover{color:var(--blue-dark);}
+.login-details-body{margin-top:16px;}
+.login-details-left summary{justify-content:flex-start;}
+
+/* The e-ID widget blends into whichever card it's embedded in (login
+   card or the profile page's own admin-card) — no nested box of its own. */
+.eid-widget-tabs{display:flex; gap:3px; background:var(--page-bg); border:1px solid var(--border); border-radius:10px; padding:3px; margin-bottom:14px;}
+.eid-widget-tabs label{
+  flex:1; text-align:center; padding:8px 6px; border-radius:7px; font-size:.8rem; font-weight:600;
+  color:var(--muted); cursor:pointer; transition:background .15s ease, color .15s ease; user-select:none;
+}
+.eid-widget-tabs input[type="radio"]{position:absolute; opacity:0; width:0; height:0;}
+.eid-widget-tabs input[type="radio"]:checked + label{background:var(--surface); color:var(--ink); box-shadow:var(--shadow);}
+.eid-widget-tabs input[type="radio"]:focus-visible + label{outline:2px solid var(--blue); outline-offset:1px;}
+.eid-widget-field{margin-bottom:14px; display:flex; flex-direction:column; gap:6px;}
+.eid-widget-field label{font-size:.8rem; color:var(--muted);}
+.eid-widget-field input{border:1px solid var(--border); border-radius:9px; padding:10px 12px; font-size:.92rem; background:var(--page-bg); color:var(--ink); font-family:inherit; width:100%;}
+.eid-widget-submit{width:100%; padding:11px;}
+.admin-banner-info{background:var(--blue-soft); border:1px solid var(--blue); color:var(--blue-dark);}
+.eid-widget-code{font-size:1.4rem; font-weight:700; letter-spacing:.08em; margin:6px 0 0;}
+
+.admin-toast{
+  position:fixed; top:20px; right:20px; z-index:1000; min-width:260px; max-width:380px;
+  padding:14px 18px; border-radius:var(--radius); box-shadow:var(--shadow);
+  display:flex; align-items:flex-start; justify-content:space-between; gap:12px; font-size:.9rem;
+  background:var(--surface); border:1px solid var(--border); color:var(--ink);
+}
+.admin-toast-success{border-color:var(--green); color:var(--green);}
+.admin-toast-error{border-color:var(--red); color:var(--red);}
+.admin-toast-close{background:none; border:none; color:inherit; font-size:1.1rem; line-height:1; cursor:pointer; opacity:.8; padding:0;}
+.admin-toast-close:hover{opacity:1;}
+
+/* Company-facing Shortlist comparison cards (client feedback, 2026-10-13)
+   — replaces the old one-big-card-per-Candidate layout. Fields reflow via
+   auto-fit/minmax rather than a fixed column count so the card never
+   needs horizontal scroll at any width; the footer (action control) is
+   the one piece that switches to a stacked, full-width layout on mobile
+   since a <select> + button pair is the hardest thing to keep readable
+   squeezed next to label text at narrow widths. */
+.shortlist-cards{display:flex; flex-direction:column; gap:16px;}
+.shortlist-card{padding:18px 20px;}
+.shortlist-card-header{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; margin-bottom:14px;}
+.shortlist-card-checks{display:flex; gap:8px; flex-wrap:wrap;}
+.shortlist-card-fields{display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:14px;}
+.shortlist-card-details{margin-top:14px; border-top:1px solid var(--border); padding-top:12px;}
+.shortlist-card-details summary{cursor:pointer; color:var(--blue-dark); font-size:.85rem; font-weight:600; list-style:none;}
+.shortlist-card-details summary::-webkit-details-marker{display:none;}
+.shortlist-card-footer{display:flex; justify-content:space-between; align-items:flex-end; gap:16px; flex-wrap:wrap; margin-top:16px; border-top:1px solid var(--border); padding-top:14px;}
+.shortlist-card-action{display:flex; gap:8px; align-items:flex-end; flex-wrap:wrap;}
+/* Client feedback 2026-10-19: the native select arrow sat flush against
+   the border with no breathing room. Author-controlled padding alone
+   can't reliably reposition a native arrow across browsers, so this
+   drops it (appearance:none) in favour of a custom chevron with its own
+   explicit spacing — swapped per theme the same way every other themed
+   token on this page is, since the SVG's stroke color can't follow a
+   CSS variable through a background-image url(). */
+.shortlist-card-action select{
+  min-width:180px; -webkit-appearance:none; -moz-appearance:none; appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2369728A' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 12px center; background-size:14px;
+  padding-right:34px;
+}
+:root[data-theme="dark"] .shortlist-card-action select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239096A8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .shortlist-card-action select{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239096A8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  }
+}
+@media (max-width:600px){
+  .shortlist-card-footer{flex-direction:column; align-items:stretch;}
+  .shortlist-card-action{width:100%;}
+  .shortlist-card-action .admin-field{flex:1; min-width:0;}
+  .shortlist-card-action select{width:100%; min-width:0;}
+}

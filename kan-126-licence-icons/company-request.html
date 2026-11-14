@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>KAN-126 proposal — Request Staff form — Staff Connection ehf.</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="assets/app.css" />
+<style>
+  .lt-icon { color: var(--muted); width: 30px; height: 22px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; gap: 3px; }
+  .checklist-item input:checked ~ .lt-icon,
+  .checklist-item:has(input:checked) .lt-icon { color: var(--red); }
+  .checklist-item { gap: 10px !important; }
+  .kan126-banner { background: #fff4f3; border: 1px solid var(--red); border-radius: 10px; padding: 14px 18px; margin: 24px auto 0; max-width: 760px; font-size: .9rem; color: #2a1412; }
+  .kan126-banner strong { color: var(--red); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-row">
+    <nav class="links">
+      <a href="#">Home</a>
+      <a href="#">About us</a>
+      <a href="#">Services</a>
+      <div class="nav-dropdown">
+        <button type="button" class="nav-dropdown-trigger">Register<span class="nav-caret"></span></button>
+      </div>
+      <div class="nav-dropdown">
+        <button type="button" class="nav-dropdown-trigger" aria-current="page">Request Staff<span class="nav-caret"></span></button>
+      </div>
+      <a href="#">Contact</a>
+    </nav>
+    <div class="nav-right">
+      <select class="lang-select" aria-label="Language">
+        <option selected>🇬🇧 EN</option>
+        <option>🇮🇸 IS</option>
+        <option>🇵🇱 PL</option>
+      </select>
+      <a href="#" class="cta-chip">Get Staffed</a>
+      <div class="logo-badge">
+        <img src="assets/images/logo.png" alt="Staff Connection ehf." />
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="kan126-banner">
+  <strong>KAN-126 proposal — for review, not live.</strong> This is the real Request Staff form with one change:
+  small icons added next to each licence category in the "Required licence categories" picker below. Everything
+  else on this page is exactly what companies see today.
+</div>
+
+<section id="request">
+  <div class="container">
+    <div class="section-head">
+      <span class="label" style="color:var(--red);">Request Staff</span>
+      <h2 style="text-transform:none;">Tell us who you need</h2>
+      <p>Fill in a few details and we'll start matching qualified candidates to your request.</p>
+    </div>
+    <form class="wide-form" onsubmit="return false;">
+
+      <div class="row-2">
+        <div class="field">
+          <label class="f" for="q-company">Company name</label>
+          <input id="q-company" type="text" value="Acme ehf." />
+        </div>
+        <div class="field">
+          <label class="f" for="q-kt">Company Kennitala</label>
+          <input id="q-kt" type="text" value="410190-1259" />
+        </div>
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label class="f" for="q-contact">Contact person</label>
+          <input id="q-contact" type="text" value="Jón Jónsson" />
+        </div>
+        <div class="field">
+          <label class="f" for="q-email">Email</label>
+          <input id="q-email" type="email" value="jon@acme.is" />
+        </div>
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label class="f">Job category</label>
+          <div class="dropdown-select">
+            <button type="button" class="dropdown-select-trigger">Construction, Electrical</button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="f">Language requirements</label>
+          <div class="dropdown-select">
+            <button type="button" class="dropdown-select-trigger">English, Icelandic</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label class="f" for="q-driving-licence">Driving licence required</label>
+          <select id="q-driving-licence">
+            <option>Select one</option>
+            <option selected>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- KAN-126: the Required licence categories field, panel shown open with the proposed icons -->
+      <div class="field" style="margin-top:16px;">
+        <label class="f">Required licence categories</label>
+        <div class="dropdown-select">
+          <button type="button" class="dropdown-select-trigger">B, C</button>
+          <div class="dropdown-select-panel" style="display:block; position:static; margin-top:6px; box-shadow:none;">
+            <input type="text" class="dropdown-select-search" placeholder="Search licence categories..." />
+            <div class="checklist">
+
+              <label class="checklist-item">
+                <input type="checkbox">
+                <span class="lt-icon"><svg viewBox="0 0 64 40" width="26" height="17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14" cy="30" r="6"/><circle cx="48" cy="30" r="6"/><path d="M14 30 L24 18 L40 18 L48 30"/><path d="M24 18 L24 10 L30 10"/><path d="M40 18 L36 24"/></svg></span>
+                <span>AM &middot; Moped</span>
+              </label>
+
+              <label class="checklist-item">
+                <input type="checkbox">
+                <span class="lt-icon"><svg viewBox="0 0 64 40" width="26" height="17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="31" r="7"/><circle cx="49" cy="31" r="7"/><path d="M13 31 L22 16 L38 16 L49 31"/><path d="M22 16 L18 8 L26 8"/><path d="M38 16 L34 24 L44 24"/></svg></span>
+                <span>A1 &middot; Light motorcycle</span>
+              </label>
+
+              <label class="checklist-item">
+                <input type="checkbox">
+                <span class="lt-icon"><svg viewBox="0 0 64 40" width="26" height="17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="31" r="7"/><circle cx="49" cy="31" r="7"/><path d="M13 31 L22 16 L38 16 L49 31"/><path d="M22 16 L18 8 L26 8"/><path d="M38 16 L34 24 L44 24"/></svg></span>
+                <span>A2 &middot; Medium motorcycle</span>
+              </label>
+
+              <label class="checklist-item">
+                <input type="checkbox">
+                <span class="lt-icon"><svg viewBox="0 0 64 40" width="26" height="17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="31" r="7"/><circle cx="49" cy="31" r="7"/><path d="M13 31 L22 16 L38 16 L49 31"/><path d="M22 16 L18 8 L26 8"/><path d="M38 16 L34 24 L44 24"/></svg></span>
+                <span>A &middot; Motorcycle</span>
+              </label>
+
+              <label class="checklist-item">
+                <input type="checkbox">
+                <span class="lt-icon"><svg viewBox="0 0 64 40" width="22" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14" cy="14" r="6"/><circle cx="50" cy="14" r="6"/><circle cx="14" cy="30" r="6"/><circle cx="50" cy="30" r="6"/><rect x="20" y="12" width="24" height="20" rx="4"/></svg></span>
+                <span>B1 &middot; Light quadricycle</span>
+              </label>
+
+              <label class="checklist-item">
+                <input type="checkbox" checked>
+                <span class="lt-icon"><svg viewBox="0 0 64 40" width="28" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 28 L10 16 Q14 10 24 10 L40 10 Q48 10 52 16 L58 28"/><path d="M4 28 L60 28"/><circle cx="16" cy="29" r="6"/><circle cx="48" cy="29" r="6"/></svg></span>
+                <span>B &middot; Car</span>
+              </label>
+
+              <label class="checklist-item">
+                <input type="checkbox">
+                <span class="lt-icon">
+                  <svg viewBox="0 0 64 40" width="20" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 28 L10 16 Q14 10 24 10 L40 10 Q48 10 52 16 L58 28"/><path d="M4 28 L60 28"/><circle cx="16" cy="29" r="6"/><circle cx="48" cy="29" r="6"/></svg>
+                  <svg viewBox="0 0 32 24" width="12" height="9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="22" height="12" rx="2"/><circle cx="24" cy="18" r="4"/></svg>
+                </span>
+                <span>BE &middot; Car with trailer</span>
+              </label>
+
+              <label class="checklist-item">
+                <input type="checkbox">
+                <span class="lt-icon"><svg viewBox="0 0 64 40" width="26" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 28 L4 14 L30 14 L30 28"/><path d="M30 20 L42 20 L48 28 L30 28"/><path d="M4 28 L54 28"/><circle cx="14" cy="29" r="6"/><circle cx="42" cy="29" r="6"/></svg></span>
+                <span>C1 &middot; Medium lorry</span>
+              </label>
+
+              <label class="checklist-item">
+                <input type="checkbox">
+                <span class="lt-icon">
+                  <svg viewBox="0 0 64 40" width="20" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 28 L4 14 L30 14 L30 28"/><path d="M30 20 L42 20 L48 28 L30 28"/><path d="M4 28 L54 28"/><circle cx="14" cy="29" r="6"/><circle cx="42" cy="29" r="6"/></svg>
+                  <svg viewBox="0 0 32 24" width="12" height="9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="22" height="12" rx="2"/><circle cx="24" cy="18" r="4"/></svg>
+                </span>
+                <span>C1E &middot; Medium lorry with trailer</span>
+              </label>
+
+              <label class="checklist-item">
+                <input type="checkbox" checked>
+                <span class="lt-icon"><svg viewBox="0 0 64 40" width="28" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 28 L2 12 L28 12 L28 28"/><path d="M28 18 L44 18 L52 28 L28 28"/><path d="M2 28 L58 28"/><circle cx="13" cy="29" r="6"/><circle cx="46" cy="29" r="6"/></svg></span>
+                <span>C &middot; Lorry</span>
+              </label>
+
+              <label class="checklist-item">
+                <input type="checkbox">
+                <span class="lt-icon">
+                  <svg viewBox="0 0 64 40" width="20" height="11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 28 L2 12 L28 12 L28 28"/><path d="M28 18 L44 18 L52 28 L28 28"/><path d="M2 28 L58 28"/><circle cx="13" cy="29" r="6"/><circle cx="46" cy="29" r="6"/></svg>
+                  <svg viewBox="0 0 32 24" width="12" height="9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="22" height="12" rx="2"/><circle cx="24" cy="18" r="4"/></svg>
+                </span>
+                <span>CE &middot; Lorry with trailer</span>
+              </label>
+
+              <label class="checklist-item">
+                <input type="checkbox">
+                <span class="lt-icon"><svg viewBox="0 0 64 40" width="28" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="52" height="18" rx="4"/><path d="M16 10 L16 28 M28 10 L28 28 M40 10 L40 28"/><circle cx="16" cy="30" r="6"/><circle cx="44" cy="30" r="6"/></svg></span>
+                <span>D1 &middot; Minibus</span>
+              </label>
+
+              <label class="checklist-item">
+                <input type="checkbox">
+                <span class="lt-icon">
+                  <svg viewBox="0 0 64 40" width="20" height="11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="52" height="18" rx="4"/><path d="M16 10 L16 28 M28 10 L28 28 M40 10 L40 28"/><circle cx="16" cy="30" r="6"/><circle cx="44" cy="30" r="6"/></svg>
+                  <svg viewBox="0 0 32 24" width="12" height="9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="22" height="12" rx="2"/><circle cx="24" cy="18" r="4"/></svg>
+                </span>
+                <span>D1E &middot; Minibus with trailer</span>
+              </label>
+
+              <label class="checklist-item">
+                <input type="checkbox">
+                <span class="lt-icon"><svg viewBox="0 0 64 40" width="28" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="9" width="58" height="19" rx="4"/><path d="M14 9 L14 28 M26 9 L26 28 M38 9 L38 28 M50 9 L50 28"/><circle cx="14" cy="30" r="6"/><circle cx="48" cy="30" r="6"/></svg></span>
+                <span>D &middot; Bus</span>
+              </label>
+
+              <label class="checklist-item">
+                <input type="checkbox">
+                <span class="lt-icon">
+                  <svg viewBox="0 0 64 40" width="20" height="10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="9" width="58" height="19" rx="4"/><path d="M14 9 L14 28 M26 9 L26 28 M38 9 L38 28 M50 9 L50 28"/><circle cx="14" cy="30" r="6"/><circle cx="48" cy="30" r="6"/></svg>
+                  <svg viewBox="0 0 32 24" width="11" height="8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="22" height="12" rx="2"/><circle cx="24" cy="18" r="4"/></svg>
+                </span>
+                <span>DE &middot; Bus with trailer</span>
+              </label>
+
+              <label class="checklist-item">
+                <input type="checkbox">
+                <span class="lt-icon"><svg viewBox="0 0 64 40" width="24" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="44" cy="28" r="10"/><circle cx="14" cy="31" r="5"/><path d="M14 31 L14 20 L26 20 L26 14 L34 14 L34 22"/><path d="M26 20 L34 20"/></svg></span>
+                <span>T &middot; Tractor</span>
+              </label>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row-2" style="margin-top:16px;">
+        <div class="field">
+          <label class="f" for="q-start">Start date</label>
+          <input id="q-start" type="date" value="2026-12-01" />
+        </div>
+        <div class="field">
+          <label class="f" for="q-end">End date</label>
+          <input id="q-end" type="date" value="2027-03-01" />
+        </div>
+        <div class="field">
+          <label class="f" for="q-duration">Duration</label>
+          <input id="q-duration" type="text" value="3 months" />
+        </div>
+      </div>
+
+      <button class="btn btn-solid" type="submit" style="justify-self:start; border:none;">Submit request</button>
+    </form>
+  </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>KAN-126 — Licence category icons (for review)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#101625; --muted:#69728a; --border:#e1e5ec; --blue:#2e86de; --red:#e63328; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #f4f6f9; color: var(--ink); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 64px 24px 80px; }
+  .eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); }
+  h1 { font-size: 30px; font-weight: 800; margin: 10px 0 14px; line-height: 1.25; }
+  p.lead { font-size: 16px; line-height: 1.65; color: #44485a; margin: 0 0 32px; }
+  .cards { display: grid; gap: 16px; margin-bottom: 36px; }
+  .card { display: block; background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; text-decoration: none; color: inherit; transition: border-color .15s ease, transform .15s ease; }
+  .card:hover { border-color: var(--blue); transform: translateY(-1px); }
+  .card .tag { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+  .card h2 { margin: 6px 0 6px; font-size: 19px; font-weight: 700; }
+  .card p { margin: 0; font-size: 14px; color: #5a5f70; line-height: 1.5; }
+  ul.notes { font-size: 14px; color: #44485a; line-height: 1.7; padding-left: 20px; }
+  .footer-note { margin-top: 40px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 20px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">KAN-126 — Proposal for review, not yet implemented</div>
+  <h1>Driving-licence category icons</h1>
+  <p class="lead">
+    A small, simple picture for every driving-licence category (AM through T), always shown together with its
+    code and label. The same icon set is used wherever licence categories appear — a Candidate picking which
+    categories they hold, and a Company picking which categories a role requires. The two pages below are the
+    real, live forms with just that one change added, so you can see it exactly as it will look in place.
+  </p>
+
+  <div class="cards">
+    <a class="card" href="candidate-step-2.html">
+      <div class="tag">Candidate registration — Step 2</div>
+      <h2>Personal details and eligibility</h2>
+      <p>The real Step 2 form. Open the "Licence types" field to see every category with its icon, and two already
+      selected (B, BE) so you can compare the selected vs. unselected look.</p>
+    </a>
+    <a class="card" href="company-request.html">
+      <div class="tag">Company — Request Staff</div>
+      <h2>Tell us who you need</h2>
+      <p>The real public "Request Staff" form. The "Required licence categories" field shows the same icon set,
+      with B and C already selected.</p>
+    </a>
+  </div>
+
+  <h2 style="font-size: 17px; margin: 0 0 10px;">A few notes</h2>
+  <ul class="notes">
+    <li>Nothing here is built or live yet — this is a direction to react to, not a finished design.</li>
+    <li>Every icon always appears with its code and label — nobody has to recognise a picture alone.</li>
+    <li>Categories with a trailer ("E" suffix) reuse the base vehicle's icon plus a small trailer glyph, rather
+    than a brand-new picture per combination.</li>
+    <li>Happy to try a different visual style (filled icons instead of line icons, a different icon set
+    entirely, etc.) — this is just a starting point.</li>
+  </ul>
+
+  <p class="footer-note">Staff Connection ehf. — internal design review, not shared publicly.</p>
+</div>
+</body>
+</html>

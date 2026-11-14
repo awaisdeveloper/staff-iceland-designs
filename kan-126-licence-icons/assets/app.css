@@ -1,0 +1,368 @@
+:root{
+  --page-bg:#F4F6F9;
+  --surface:#FFFFFF;
+  --ink:#101625;
+  --muted:#69728A;
+  --navy:#0F1C3F;
+  --blue:#2E86DE;
+  --red:#E63328;
+  --border:#E1E5EC;
+}
+:root[data-theme="dark"]{
+  --page-bg:#0B0F17;
+  --surface:#131826;
+  --ink:#EEF0F5;
+  --muted:#9096A8;
+  --border:#232B3C;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --page-bg:#0B0F17;
+    --surface:#131826;
+    --ink:#EEF0F5;
+    --muted:#9096A8;
+    --border:#232B3C;
+  }
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{transition:none !important; animation:none !important;} }
+body{margin:0; background:var(--page-bg); color:var(--ink); font-family:"Helvetica Neue","Arial",system-ui,sans-serif;}
+img{max-width:100%; display:block;}
+a{color:inherit;}
+.container{max-width:1200px; margin:0 auto; padding:0 28px;}
+h1,h2,h3{
+  font-family:"Arial Black","Helvetica Neue",system-ui,sans-serif;
+  font-weight:900;
+  letter-spacing:-.01em;
+  text-wrap:balance;
+  margin:0;
+  text-transform:uppercase;
+}
+.label{
+  font-family:Verdana,sans-serif;
+  font-size:.68rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+
+/* NAV */
+header.nav{position:sticky; top:0; z-index:50; background:var(--navy);}
+.nav-row{display:flex; align-items:center; justify-content:space-between; padding:16px 28px; max-width:1320px; margin:0 auto;}
+nav.links{display:flex; align-items:center; gap:22px;}
+nav.links a{color:#C7D2E8; text-decoration:none; font-size:.85rem; font-weight:700; letter-spacing:.03em; text-transform:uppercase; white-space:nowrap; flex-shrink:0;}
+nav.links a:hover, nav.links a:focus-visible, nav.links a[aria-current="page"]{color:#fff; outline:none;}
+.cta-chip{background:var(--red); color:#fff !important; padding:10px 20px; clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%); text-decoration:none; font-size:.85rem; font-weight:700; letter-spacing:.03em; text-transform:uppercase; white-space:nowrap; flex-shrink:0;}
+.cta-chip:hover{background:#c22a20;}
+.nav-right{display:flex; align-items:center; gap:14px; flex-shrink:0;}
+.lang-select{
+  background:transparent; border:1px solid rgba(255,255,255,.35); color:#fff;
+  padding:8px 10px; font-family:"Helvetica Neue",sans-serif; font-size:.82rem; border-radius:4px; cursor:pointer;
+}
+.lang-select:focus-visible{outline:2px solid var(--red); outline-offset:1px;}
+.lang-select option{color:#000;}
+.logo-badge{background:#fff; border-radius:10px; padding:6px 14px; display:flex; align-items:center; flex-shrink:0;}
+.logo-badge img{height:26px; display:block;}
+.nav-toggle-input, .nav-toggle-label{display:none;}
+
+.nav-dropdown{position:relative; flex-shrink:0;}
+.nav-dropdown-trigger{
+  background:none; border:none; padding:0; margin:0; cursor:pointer; font-family:inherit;
+  display:flex; align-items:center; gap:6px; white-space:nowrap;
+  color:#C7D2E8; font-size:.85rem; font-weight:700; letter-spacing:.03em; text-transform:uppercase;
+}
+.nav-dropdown-trigger:hover, .nav-dropdown-trigger:focus-visible, .nav-dropdown-trigger.is-open, .nav-dropdown-trigger[aria-current="page"]{color:#fff; outline:none;}
+.nav-caret{
+  width:0; height:0; flex-shrink:0;
+  border-left:4px solid transparent; border-right:4px solid transparent; border-top:5px solid currentColor;
+  transition:transform .15s ease;
+}
+.nav-caret.is-open{transform:rotate(180deg);}
+.nav-dropdown-menu{
+  position:absolute; top:calc(100% + 16px); left:0; min-width:160px; z-index:60;
+  background:var(--surface); border:1px solid var(--border); box-shadow:0 10px 28px rgba(0,0,0,.16); padding:6px 0;
+}
+.nav-dropdown-menu a{
+  display:block; padding:10px 16px; color:var(--ink) !important;
+  font-size:.82rem; font-weight:500; letter-spacing:0; text-transform:none;
+}
+.nav-dropdown-menu a:hover{background:var(--page-bg);}
+
+@media (max-width:1100px){
+  nav.links{position:absolute; top:100%; left:0; right:0; background:var(--navy); flex-direction:column; align-items:flex-start; padding:6px 28px 24px; gap:18px; display:none;}
+  .nav-toggle-input:checked ~ nav.links{display:flex;}
+  .nav-toggle-label{display:block; color:#fff; font-size:1.6rem; cursor:pointer;}
+  .nav-dropdown{width:100%;}
+  .nav-dropdown-menu{
+    position:static; box-shadow:none; border:none; background:none; padding:10px 0 0 4px; margin-top:0;
+  }
+  .nav-dropdown-menu a{color:#C7D2E8 !important; padding:8px 0;}
+  .nav-dropdown-menu a:hover{background:none; color:#fff !important;}
+}
+
+@media (max-width:480px){
+  /* Narrow phones: the language switcher, CTA chip, and logo badge sit in
+     one row alongside the hamburger icon (nav.links itself is collapsed
+     into the toggle menu at this width) — the CTA's label is the longest
+     of the three across all supported languages, so it's the one that
+     needs to shrink to keep this row from overflowing. */
+  .nav-right{gap:8px;}
+  .cta-chip{padding:9px 12px; font-size:.72rem;}
+  .lang-select{padding:7px 6px; font-size:.76rem;}
+  .logo-badge{padding:5px 10px;}
+  .logo-badge img{height:20px;}
+}
+
+/* HERO */
+.hero{
+  position:relative; overflow:hidden; background:var(--navy); color:#fff;
+  padding:110px 0 130px;
+  clip-path:polygon(0 0,100% 0,100% 88%,0 100%);
+  margin-bottom:-60px;
+}
+.hero::before{
+  content:""; position:absolute; top:-20%; right:-10%; width:70%; height:140%;
+  background:linear-gradient(135deg, var(--blue), var(--red));
+  opacity:.18;
+  clip-path:polygon(30% 0,100% 0,70% 100%,0% 100%);
+}
+.hero .container{position:relative; z-index:2;}
+.hero .label{color:#7FB4EE;}
+.hero h1{font-size:clamp(2.3rem,5.4vw,4.2rem); line-height:1.02; margin:18px 0 24px; max-width:16ch;}
+.hero h1 .accent{color:var(--red);}
+.hero p.lead{color:#C7D2E8; font-size:1.15rem; max-width:44ch; margin:0 0 34px; font-weight:400; text-transform:none;}
+.hero-ctas{display:flex; gap:18px; flex-wrap:wrap;}
+.btn{display:inline-block; padding:15px 30px; font-family:"Arial Black",sans-serif; font-size:.85rem; letter-spacing:.04em; text-transform:uppercase; text-decoration:none; cursor:pointer; border:2px solid transparent;}
+.btn-solid{background:var(--red); color:#fff;}
+.btn-solid:hover{background:#c22a20;}
+.btn-outline{border-color:#fff; color:#fff; background:transparent;}
+.btn-outline:hover{background:rgba(255,255,255,.12);}
+
+.stat-strip{display:flex; gap:0; margin-top:64px; flex-wrap:wrap;}
+.stat-strip .stat{padding:18px 32px 0 0; border-top:3px solid var(--blue); margin-right:32px;}
+.stat-strip .stat:nth-child(2){border-top-color:var(--red);}
+.stat-strip .stat:nth-child(3){border-top-color:#fff;}
+.stat-strip b{display:block; font-family:"Arial Black",sans-serif; font-size:1.9rem;}
+.stat-strip span{color:#9AA6C2; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;}
+/* A non-numeric stat (a short phrase instead of a number) needs a smaller,
+   non-display typeface — the default size/font here is sized for a
+   2-4 character number and overflows badly with a full phrase. */
+.stat-strip .stat-text{max-width:220px;}
+.stat-strip .stat-text b{font-family:inherit; font-size:1rem; font-weight:700; text-transform:uppercase; letter-spacing:.02em;}
+
+section{padding:100px 0 90px; position:relative; z-index:1;}
+.section-head{max-width:680px; margin:0 0 52px;}
+.section-head .label{color:var(--red);}
+.section-head h2{font-size:clamp(1.9rem,3.4vw,2.6rem); margin-top:14px; text-transform:none;}
+.section-head p{color:var(--muted); margin-top:16px; font-size:1.05rem; max-width:56ch;}
+
+/* ABOUT */
+.about-wrap{display:grid; grid-template-columns:1.1fr .9fr; gap:60px; align-items:start;}
+.pull{
+  font-family:"Arial Black",sans-serif; font-size:clamp(1.3rem,2.4vw,1.7rem); line-height:1.35;
+  text-transform:none; border-left:6px solid var(--red); padding-left:26px; margin-bottom:28px;
+}
+.about-copy p{color:var(--muted); font-size:1rem; max-width:58ch; margin:0 0 16px;}
+.legal-copy{max-width:74ch;}
+.legal-copy h3{font-size:1rem; margin:28px 0 8px;}
+.legal-copy p{color:var(--muted); font-size:.95rem; line-height:1.6; margin:0 0 4px;}
+.legal-copy p.pull{color:var(--ink); max-width:none;}
+.block-stack{display:grid; gap:14px;}
+.block{padding:24px 26px; color:#fff;}
+.block:nth-child(1){background:var(--navy);}
+.block:nth-child(2){background:var(--blue);}
+.block:nth-child(3){background:var(--red);}
+.block h3{font-size:1rem; margin-bottom:8px; text-transform:none;}
+.block p{margin:0; font-size:.88rem; opacity:.92; font-family:"Helvetica Neue",sans-serif; font-weight:400;}
+
+/* SERVICES */
+/* Two clearly separated columns (company vs. people), each with its own
+   heading and CTA directly beneath its own cards — required so the two
+   groups never read as being under one shared heading, on desktop or
+   stacked on mobile. */
+.services-columns{display:grid; grid-template-columns:1fr 1fr; grid-template-rows:auto auto auto auto auto; column-gap:40px;}
+.services-column{display:grid; grid-template-rows:subgrid; grid-row:1 / span 5;}
+.services-column-heading{font-family:"Arial Black",sans-serif; font-size:1rem; margin:0 0 18px;}
+.service-list{display:grid; grid-template-rows:subgrid; grid-row:2 / span 3; gap:20px;}
+.service-card{
+  background:var(--surface); border:1px solid var(--border); padding:30px 28px;
+  transform:rotate(0deg); transition:transform .15s ease, box-shadow .15s ease;
+  position:relative;
+}
+.service-card:hover{transform:rotate(-.6deg) translateY(-3px); box-shadow:0 14px 30px -18px rgba(15,28,63,.35);}
+.service-card::before{content:""; position:absolute; top:0; left:0; width:44px; height:5px; background:var(--blue);}
+.service-card.for-people::before{background:var(--red);}
+.service-card h4{font-family:"Arial Black",sans-serif; font-size:1.05rem; text-transform:none; margin:0 0 10px;}
+.service-card p{color:var(--muted); font-size:.92rem; margin:0;}
+@media (max-width:760px){
+  .services-columns{grid-template-columns:1fr; grid-template-rows:none; row-gap:40px;}
+  .services-column{display:block; grid-row:auto;}
+  .service-list{display:grid; grid-template-rows:none; grid-row:auto; gap:20px;}
+  .about-wrap{grid-template-columns:1fr;}
+}
+
+/* CONTACT */
+.contact-wrap{display:grid; grid-template-columns:.9fr 1.1fr; gap:0; border:1px solid var(--border);}
+.contact-panel{background:var(--navy); color:#fff; padding:44px 38px;}
+.contact-panel h3{text-transform:none; font-size:1.3rem; margin-bottom:22px;}
+.contact-panel .row{padding:14px 0; border-top:1px solid rgba(255,255,255,.15);}
+.contact-panel .row:first-of-type{border-top:none;}
+.contact-panel .row .label{color:#7FB4EE; display:block; margin-bottom:4px;}
+.form-panel{background:var(--surface); padding:44px 38px;}
+form{display:grid; gap:16px;}
+/* For a form section wrapped in its own element (e.g. an Alpine x-show
+   toggle around the whole field area, swapped for a success banner on
+   submit) — the form's own grid-gap above only spaces its DIRECT
+   children, so a wrapper like that silently loses all row spacing
+   unless it repeats the same grid+gap itself. */
+.form-grid{display:grid; gap:16px;}
+.row-2{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px; align-items:start;}
+.field-full-width{grid-column:1 / -1;}
+.field{display:grid; gap:6px;}
+/* A short-value control (yes/no select, a date picker) left alone on a
+   full-width row — e.g. because its usual row-2 partner is conditionally
+   hidden — would otherwise stretch to the full ~780px form width and read
+   as an empty, oversized bar rather than a deliberate choice. Cap it at a
+   sensible width instead; row-2 columns (~382px) are already narrower
+   than this, so it never affects paired fields. */
+.field > select, .field > input[type="date"]{max-width:420px;}
+label.f{font-size:.78rem; color:var(--muted); font-family:Verdana,sans-serif; letter-spacing:.03em;}
+input, textarea, select{background:var(--page-bg); border:1px solid var(--border); color:var(--ink); padding:13px 14px; font-family:"Helvetica Neue",sans-serif; font-size:.95rem; width:100%;}
+input:focus-visible, textarea:focus-visible, select:focus-visible{outline:2px solid var(--red); outline-offset:1px;}
+textarea{resize:vertical; min-height:110px;}
+input[type="file"]{padding:10px 10px;}
+input[type="file"]::file-selector-button{
+  background:var(--red); color:#fff; border:none; padding:9px 16px; margin-right:12px;
+  font-family:"Arial Black",sans-serif; font-size:.78rem; text-transform:uppercase; letter-spacing:.03em; cursor:pointer;
+}
+.opt{font-family:"Helvetica Neue",sans-serif; font-weight:400; color:var(--muted); font-size:.78rem; text-transform:none; letter-spacing:0;}
+.checklist{
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:8px 16px;
+  border:1px solid var(--border); background:var(--page-bg); padding:14px; max-height:220px; overflow-y:auto;
+}
+.checklist-item{
+  display:flex; align-items:flex-start; gap:8px; font-family:"Helvetica Neue",sans-serif; font-size:.88rem; color:var(--ink); cursor:pointer;
+}
+.checklist-item input{width:auto; padding:0; flex-shrink:0; margin-top:3px;}
+.checklist-item-disabled{opacity:.45; cursor:not-allowed;}
+.checklist-item-disabled input{cursor:not-allowed;}
+.consent-label{align-items:flex-start; cursor:pointer; font-size:.88rem;}
+.consent-label input{margin-top:3px; flex-shrink:0;}
+.consent-label a{color:var(--ink); text-decoration:underline;}
+
+.dropdown-select{position:relative; min-width:0;}
+.dropdown-select-trigger{
+  background:var(--page-bg); border:1px solid var(--border); color:var(--ink); padding:13px 14px;
+  font-family:"Helvetica Neue",sans-serif; font-size:.95rem; width:100%; text-align:left; cursor:pointer;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.dropdown-select-panel{
+  position:absolute; top:calc(100% + 4px); left:0; right:0; z-index:20; background:var(--surface);
+  border:1px solid var(--border); box-shadow:0 10px 28px rgba(0,0,0,.16);
+}
+.dropdown-select-search{
+  width:100%; border:none; border-bottom:1px solid var(--border); padding:11px 14px;
+  font-family:"Helvetica Neue",sans-serif; font-size:.9rem; background:transparent; color:var(--ink);
+}
+.dropdown-select-panel .checklist{
+  border:none; background:none; grid-template-columns:1fr; max-height:200px; padding:8px 14px;
+}
+.dropdown-select-empty{padding:14px; font-family:"Helvetica Neue",sans-serif; font-size:.85rem; color:var(--muted);}
+
+/* KAN-130 — grouped region/municipality picker (<x-municipality-picker>,
+   <x-work-area-picker>). Same component as the admin panel's version
+   (admin.css), reimplemented here with the public site's own tokens,
+   same precedent as .dropdown-select/.checklist above. */
+.dropdown-select-panel .dropdown-region{border-bottom:1px solid var(--border);}
+.dropdown-select-panel .dropdown-region:last-child{border-bottom:none;}
+.dropdown-region-head{
+  display:flex; align-items:center; gap:8px; padding:11px 14px; font-family:"Helvetica Neue",sans-serif;
+  font-size:.9rem; font-weight:700; color:var(--ink); cursor:pointer; user-select:none;
+}
+.dropdown-region-head input{width:auto; flex-shrink:0; padding:0;}
+.dropdown-region-head .count{margin-left:auto; color:var(--muted); font-weight:400; font-size:.82rem;}
+.dropdown-region-head .chevron{flex-shrink:0; transition:transform .15s ease;}
+.dropdown-region.open .dropdown-region-head .chevron{transform:rotate(90deg);}
+.dropdown-region .munis{display:none; flex-direction:column; gap:2px; padding:0 14px 10px 36px;}
+.dropdown-region.open .munis{display:flex;}
+.muni-row{display:flex; align-items:center; gap:8px; font-family:"Helvetica Neue",sans-serif; font-size:.88rem; color:var(--ink); cursor:pointer; padding:4px 0;}
+.muni-row input{width:auto; flex-shrink:0; padding:0;}
+.wide-form{max-width:780px;}
+.btn-dark-outline{border-color:var(--ink); color:var(--ink); background:transparent;}
+.btn-dark-outline:hover{background:var(--border);}
+.grid-ctas{display:flex; gap:18px; margin-top:auto; padding-top:40px; flex-wrap:wrap;}
+@media (max-width:760px){.contact-wrap{grid-template-columns:1fr;} .row-2{grid-template-columns:1fr;}}
+
+[x-cloak]{display:none !important;}
+.field-error{color:var(--red); font-size:.8rem; font-family:"Helvetica Neue",sans-serif; font-weight:400; text-transform:none;}
+.field-hint{color:var(--muted); font-size:.8rem; font-family:"Helvetica Neue",sans-serif; font-weight:400; text-transform:none; margin:4px 0 0;}
+.field.has-error input, .field.has-error select, .field.has-error textarea{border-color:var(--red);}
+.form-banner{padding:14px 18px; font-family:"Helvetica Neue",sans-serif; font-size:.92rem; font-weight:400; text-transform:none;}
+.form-banner-success{background:rgba(46,134,72,.12); border:1px solid #2E8648; color:#2E8648;}
+.form-banner-error{background:rgba(230,51,40,.1); border:1px solid var(--red); color:var(--red);}
+/* Text/border/background-tint all share --blue, same pattern as the
+   success/error variants above — needed because a fixed dark colour like
+   --navy doesn't adapt for dark mode and goes unreadable against the
+   near-black page background used there. */
+.form-banner-info{background:rgba(46,134,222,.14); border:1px solid var(--blue); color:var(--blue); margin-bottom:20px;}
+.btn[disabled]{opacity:.6; cursor:not-allowed;}
+
+/* KAN-128 registration wizard progress bar — matches the client's
+   wireframes (thin track, filled proportionally to the current step). */
+.registration-progress{margin-top:28px;}
+.registration-progress-track{height:4px; border-radius:2px; background:var(--border); overflow:hidden;}
+.registration-progress-fill{height:100%; background:var(--blue); border-radius:2px; transition:width .2s ease;}
+.registration-progress-label{margin:10px 0 0; text-align:center; font-family:"Helvetica Neue",sans-serif; font-size:.85rem; color:var(--muted);}
+
+.cookie-notice{
+  position:fixed; left:0; right:0; bottom:0; z-index:50; background:var(--navy); color:#C7D2E8;
+  box-shadow:0 -6px 20px rgba(0,0,0,.18);
+}
+.cookie-notice-inner{
+  display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; padding:16px 0;
+}
+.cookie-notice-inner p{margin:0; font-family:"Helvetica Neue",sans-serif; font-size:.85rem; max-width:60ch;}
+.cookie-notice-actions{display:flex; align-items:center; gap:18px; flex-shrink:0;}
+.cookie-notice-actions a{color:#C7D2E8; font-size:.82rem; text-decoration:underline;}
+.cookie-notice-dismiss{
+  background:var(--red); color:#fff; border:none; padding:10px 20px; cursor:pointer;
+  font-family:"Arial Black",sans-serif; font-size:.75rem; text-transform:uppercase; letter-spacing:.03em;
+}
+@media (max-width:600px){.cookie-notice-inner{flex-direction:column; align-items:flex-start;}}
+
+footer{background:var(--navy); color:#C7D2E8; padding:36px 0;}
+.footer-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;}
+.footer-row img{height:22px; filter:brightness(0) invert(1); opacity:.85;}
+.footer-links{display:flex; gap:22px; font-size:.82rem; flex-wrap:wrap;}
+.footer-links a{text-decoration:none; color:#C7D2E8; text-transform:uppercase; letter-spacing:.03em;}
+.footer-links a:hover{color:#fff;}
+
+.footer-bottom-row{
+  display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:12px;
+  margin-top:24px; padding-top:20px; border-top:1px solid rgba(255,255,255,.1);
+}
+.social-icons{display:flex; gap:10px; justify-content:flex-end;}
+.social-icon{
+  display:flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:50%;
+  background:rgba(255,255,255,.1); color:#fff; text-decoration:none; transition:background .15s ease;
+}
+.social-icon:hover{background:var(--red);}
+.social-icon svg{width:17px; height:17px;}
+.copyright{font-size:.75rem; color:#7480A0; margin:0;}
+
+.quick-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px;}
+.quick-card{padding:26px 24px; color:#fff;}
+.quick-card:nth-child(3n+1){background:var(--navy);}
+.quick-card:nth-child(3n+2){background:var(--blue);}
+.quick-card:nth-child(3n+3){background:var(--red);}
+.quick-card h3{font-family:"Arial Black","Helvetica Neue",sans-serif; font-size:1rem; text-transform:none; margin:0 0 8px;}
+.quick-card p{margin:0 0 14px; font-size:.88rem; opacity:.92; font-family:"Helvetica Neue",sans-serif; font-weight:400;}
+.quick-card a{color:#fff; font-family:Verdana,sans-serif; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; text-decoration:none; border-bottom:1px solid rgba(255,255,255,.6);}
+
+/* Honeypot: kept in the layout flow (not display:none) so basic bots that
+   skip hidden fields still fill it in, but positioned off-screen and out of
+   tab order so no real visitor ever sees or reaches it. */
+.hp-field{position:absolute; left:-9999px; top:-9999px; width:1px; height:1px; overflow:hidden;}
+
+.char-counter{display:block; text-align:right; font-size:.76rem; color:var(--muted); margin-top:4px;}
+.char-counter.char-counter-limit{color:var(--red);}

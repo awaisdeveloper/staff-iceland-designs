@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>KAN-126 proposal — Candidate registration, Step 2 — Staff Connection ehf.</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="assets/admin.css" />
+<style>
+  /* Icon treatment proposed for KAN-126 — additive only, nothing else on
+     this page changed from the live Step 2 form. */
+  .lt-icon { color: var(--muted); width: 30px; height: 22px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; gap: 3px; }
+  .checklist-item input:checked ~ .lt-icon,
+  .checklist-item:has(input:checked) .lt-icon { color: var(--blue); }
+  .checklist-item { gap: 10px !important; }
+  .kan126-banner { background: var(--blue-soft); border: 1px solid var(--blue); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; font-size: .88rem; color: var(--ink); }
+  .kan126-banner strong { color: var(--blue-dark); }
+</style>
+</head>
+<body>
+
+<div class="admin-topbar">
+  <div class="admin-brand">
+    <img src="assets/images/logo.png" alt="Staff Connection ehf." />
+    Candidate Portal
+  </div>
+  <div class="admin-nav-wrap">
+    <nav class="admin-nav">
+      <a href="#">Dashboard</a>
+      <a href="#">My Applications</a>
+      <a href="#">Documents</a>
+      <a href="#">Right to Work</a>
+      <a href="#">My Agreements</a>
+      <a href="#">Timesheets</a>
+    </nav>
+    <div class="admin-logout">
+      <a href="#">Profile</a>
+      <button type="button">Log out</button>
+    </div>
+  </div>
+</div>
+
+<div class="admin-wrap">
+
+  <div class="kan126-banner">
+    <strong>KAN-126 proposal — for review, not live.</strong> This is the real Step 2 registration form with one
+    change: small icons added next to each licence category in the "Licence types" picker below. Everything else
+    on this page is exactly what candidates see today.
+  </div>
+
+  <div class="registration-progress">
+    <div class="registration-progress-track"><div class="registration-progress-fill" style="width: 20%;"></div></div>
+    <p class="registration-progress-label">Step 2 of 5 — 20%</p>
+  </div>
+  <h1 class="admin-heading">Personal details and eligibility</h1>
+  <p class="admin-subheading">Tell us a little more about yourself and the work you can do.</p>
+
+  <div class="admin-card">
+    <form method="POST" onsubmit="return false;">
+
+      <div class="admin-form-grid">
+        <div class="admin-field">
+          <label for="address">Address</label>
+          <input id="address" name="address" type="text" value="Langholtsvegi 176" />
+        </div>
+
+        <div class="admin-field">
+          <label for="nationality_id">Nationality</label>
+          <select id="nationality_id" name="nationality_id">
+            <option>Select one</option>
+            <option selected>Icelandic</option>
+            <option>Polish</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="admin-field">
+          <label>Languages spoken</label>
+          <div class="dropdown-select">
+            <button type="button" class="dropdown-select-trigger">Icelandic, English</button>
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <label for="gender">Gender</label>
+          <select id="gender" name="gender">
+            <option>Select one</option>
+            <option selected>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="admin-field">
+          <label for="candidate_type">Engagement type</label>
+          <select id="candidate_type" name="candidate_type">
+            <option selected>Employee</option>
+            <option>Contractor</option>
+            <option>Both</option>
+          </select>
+        </div>
+
+        <div class="admin-field">
+          <label for="pension_fund_id">Pension fund <span class="opt">— optional</span></label>
+          <select id="pension_fund_id" name="pension_fund_id">
+            <option selected>Gildi Pension Fund</option>
+          </select>
+        </div>
+
+        <div class="admin-field">
+          <label for="trade_union_id">Trade union <span class="opt">— optional</span></label>
+          <select id="trade_union_id" name="trade_union_id">
+            <option selected>Efling Trade Union</option>
+          </select>
+        </div>
+
+        <div class="admin-field">
+          <label for="right_to_work">Legal right to work in Iceland</label>
+          <select id="right_to_work" name="right_to_work">
+            <option selected>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+
+        <div class="admin-field">
+          <label for="driver_license">Driver's licence</label>
+          <select id="driver_license" name="driver_license">
+            <option>Select one</option>
+            <option selected>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+
+        <!-- KAN-126: the Licence types field, panel shown open with the proposed icons -->
+        <div class="admin-field">
+          <label>Licence types</label>
+          <div class="dropdown-select">
+            <button type="button" class="dropdown-select-trigger">B, BE</button>
+            <div class="dropdown-select-panel" style="display:block; position:static; margin-top:6px; box-shadow:none;">
+              <div class="checklist">
+
+                <label class="checklist-item">
+                  <input type="checkbox">
+                  <span class="lt-icon"><svg viewBox="0 0 64 40" width="26" height="17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14" cy="30" r="6"/><circle cx="48" cy="30" r="6"/><path d="M14 30 L24 18 L40 18 L48 30"/><path d="M24 18 L24 10 L30 10"/><path d="M40 18 L36 24"/></svg></span>
+                  <span>AM &middot; Moped</span>
+                </label>
+
+                <label class="checklist-item">
+                  <input type="checkbox">
+                  <span class="lt-icon"><svg viewBox="0 0 64 40" width="26" height="17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="31" r="7"/><circle cx="49" cy="31" r="7"/><path d="M13 31 L22 16 L38 16 L49 31"/><path d="M22 16 L18 8 L26 8"/><path d="M38 16 L34 24 L44 24"/></svg></span>
+                  <span>A1 &middot; Light motorcycle</span>
+                </label>
+
+                <label class="checklist-item">
+                  <input type="checkbox">
+                  <span class="lt-icon"><svg viewBox="0 0 64 40" width="26" height="17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="31" r="7"/><circle cx="49" cy="31" r="7"/><path d="M13 31 L22 16 L38 16 L49 31"/><path d="M22 16 L18 8 L26 8"/><path d="M38 16 L34 24 L44 24"/></svg></span>
+                  <span>A2 &middot; Medium motorcycle</span>
+                </label>
+
+                <label class="checklist-item">
+                  <input type="checkbox">
+                  <span class="lt-icon"><svg viewBox="0 0 64 40" width="26" height="17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13" cy="31" r="7"/><circle cx="49" cy="31" r="7"/><path d="M13 31 L22 16 L38 16 L49 31"/><path d="M22 16 L18 8 L26 8"/><path d="M38 16 L34 24 L44 24"/></svg></span>
+                  <span>A &middot; Motorcycle</span>
+                </label>
+
+                <label class="checklist-item">
+                  <input type="checkbox">
+                  <span class="lt-icon"><svg viewBox="0 0 64 40" width="22" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14" cy="14" r="6"/><circle cx="50" cy="14" r="6"/><circle cx="14" cy="30" r="6"/><circle cx="50" cy="30" r="6"/><rect x="20" y="12" width="24" height="20" rx="4"/></svg></span>
+                  <span>B1 &middot; Light quadricycle</span>
+                </label>
+
+                <label class="checklist-item">
+                  <input type="checkbox" checked>
+                  <span class="lt-icon"><svg viewBox="0 0 64 40" width="28" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 28 L10 16 Q14 10 24 10 L40 10 Q48 10 52 16 L58 28"/><path d="M4 28 L60 28"/><circle cx="16" cy="29" r="6"/><circle cx="48" cy="29" r="6"/></svg></span>
+                  <span>B &middot; Car</span>
+                </label>
+
+                <label class="checklist-item">
+                  <input type="checkbox" checked>
+                  <span class="lt-icon">
+                    <svg viewBox="0 0 64 40" width="20" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 28 L10 16 Q14 10 24 10 L40 10 Q48 10 52 16 L58 28"/><path d="M4 28 L60 28"/><circle cx="16" cy="29" r="6"/><circle cx="48" cy="29" r="6"/></svg>
+                    <svg viewBox="0 0 32 24" width="12" height="9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="22" height="12" rx="2"/><circle cx="24" cy="18" r="4"/></svg>
+                  </span>
+                  <span>BE &middot; Car with trailer</span>
+                </label>
+
+                <label class="checklist-item">
+                  <input type="checkbox">
+                  <span class="lt-icon"><svg viewBox="0 0 64 40" width="26" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 28 L4 14 L30 14 L30 28"/><path d="M30 20 L42 20 L48 28 L30 28"/><path d="M4 28 L54 28"/><circle cx="14" cy="29" r="6"/><circle cx="42" cy="29" r="6"/></svg></span>
+                  <span>C1 &middot; Medium lorry</span>
+                </label>
+
+                <label class="checklist-item">
+                  <input type="checkbox">
+                  <span class="lt-icon">
+                    <svg viewBox="0 0 64 40" width="20" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 28 L4 14 L30 14 L30 28"/><path d="M30 20 L42 20 L48 28 L30 28"/><path d="M4 28 L54 28"/><circle cx="14" cy="29" r="6"/><circle cx="42" cy="29" r="6"/></svg>
+                    <svg viewBox="0 0 32 24" width="12" height="9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="22" height="12" rx="2"/><circle cx="24" cy="18" r="4"/></svg>
+                  </span>
+                  <span>C1E &middot; Medium lorry with trailer</span>
+                </label>
+
+                <label class="checklist-item">
+                  <input type="checkbox">
+                  <span class="lt-icon"><svg viewBox="0 0 64 40" width="28" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 28 L2 12 L28 12 L28 28"/><path d="M28 18 L44 18 L52 28 L28 28"/><path d="M2 28 L58 28"/><circle cx="13" cy="29" r="6"/><circle cx="46" cy="29" r="6"/></svg></span>
+                  <span>C &middot; Lorry</span>
+                </label>
+
+                <label class="checklist-item">
+                  <input type="checkbox">
+                  <span class="lt-icon">
+                    <svg viewBox="0 0 64 40" width="20" height="11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 28 L2 12 L28 12 L28 28"/><path d="M28 18 L44 18 L52 28 L28 28"/><path d="M2 28 L58 28"/><circle cx="13" cy="29" r="6"/><circle cx="46" cy="29" r="6"/></svg>
+                    <svg viewBox="0 0 32 24" width="12" height="9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="22" height="12" rx="2"/><circle cx="24" cy="18" r="4"/></svg>
+                  </span>
+                  <span>CE &middot; Lorry with trailer</span>
+                </label>
+
+                <label class="checklist-item">
+                  <input type="checkbox">
+                  <span class="lt-icon"><svg viewBox="0 0 64 40" width="28" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="52" height="18" rx="4"/><path d="M16 10 L16 28 M28 10 L28 28 M40 10 L40 28"/><circle cx="16" cy="30" r="6"/><circle cx="44" cy="30" r="6"/></svg></span>
+                  <span>D1 &middot; Minibus</span>
+                </label>
+
+                <label class="checklist-item">
+                  <input type="checkbox">
+                  <span class="lt-icon">
+                    <svg viewBox="0 0 64 40" width="20" height="11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="52" height="18" rx="4"/><path d="M16 10 L16 28 M28 10 L28 28 M40 10 L40 28"/><circle cx="16" cy="30" r="6"/><circle cx="44" cy="30" r="6"/></svg>
+                    <svg viewBox="0 0 32 24" width="12" height="9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="22" height="12" rx="2"/><circle cx="24" cy="18" r="4"/></svg>
+                  </span>
+                  <span>D1E &middot; Minibus with trailer</span>
+                </label>
+
+                <label class="checklist-item">
+                  <input type="checkbox">
+                  <span class="lt-icon"><svg viewBox="0 0 64 40" width="28" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="9" width="58" height="19" rx="4"/><path d="M14 9 L14 28 M26 9 L26 28 M38 9 L38 28 M50 9 L50 28"/><circle cx="14" cy="30" r="6"/><circle cx="48" cy="30" r="6"/></svg></span>
+                  <span>D &middot; Bus</span>
+                </label>
+
+                <label class="checklist-item">
+                  <input type="checkbox">
+                  <span class="lt-icon">
+                    <svg viewBox="0 0 64 40" width="20" height="10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="9" width="58" height="19" rx="4"/><path d="M14 9 L14 28 M26 9 L26 28 M38 9 L38 28 M50 9 L50 28"/><circle cx="14" cy="30" r="6"/><circle cx="48" cy="30" r="6"/></svg>
+                    <svg viewBox="0 0 32 24" width="11" height="8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="22" height="12" rx="2"/><circle cx="24" cy="18" r="4"/></svg>
+                  </span>
+                  <span>DE &middot; Bus with trailer</span>
+                </label>
+
+                <label class="checklist-item">
+                  <input type="checkbox">
+                  <span class="lt-icon"><svg viewBox="0 0 64 40" width="24" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="44" cy="28" r="10"/><circle cx="14" cy="31" r="5"/><path d="M14 31 L14 20 L26 20 L26 14 L34 14 L34 22"/><path d="M26 20 L34 20"/></svg></span>
+                  <span>T &middot; Tractor</span>
+                </label>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <label for="own_car">Own car</label>
+          <select id="own_car" name="own_car">
+            <option>Select one</option>
+            <option selected>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="admin-btn">Continue</button>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>
